@@ -1,0 +1,26 @@
+{
+  "name": "client_madera",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "nuxt --port 8000",
+    "build": "nuxt build",
+    "start": "nuxt start",
+    "generate": "nuxt generate",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nuxtjs/axios": "^5.12.5",
+    "@nuxtjs/pwa": "^3.3.5",
+    "core-js": "^3.8.3",
+    "nuxt": "^2.14.12",
+    "nuxt-buefy": "^0.4.4"
+  },
+  "devDependencies": {
+    "@vue/test-utils": "^1.1.2",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "vue-jest": "^3.0.4"
+  }
+}

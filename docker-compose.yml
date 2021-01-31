@@ -1,0 +1,24 @@
+version: '3'
+services:
+
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
+
+  mysql:
+    image: "mysql:5.7.33"
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: "admin"
+      MYSQL_USER: "test"
+      MYSQL_PASSWORD: "test"
+      MYSQL_DATABASE: "test"
+
+  mailhog:
+    image: mailhog/mailhog
+    ports:
+      - 1025:1025 # smtp server
+      - 8025:8025 # web ui
