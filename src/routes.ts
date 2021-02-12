@@ -1,5 +1,7 @@
 import {UserController} from "./controller/UserController";
 
+// Do not use, for example only
+
 export const Routes = [{
     method: "get",
     route: "/users",

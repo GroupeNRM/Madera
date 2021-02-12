@@ -7,7 +7,7 @@ services:
     ports:
       - 8080:8080
 
-  mysql:
+  db:
     image: "mysql:5.7.33"
     ports:
       - "3306:3306"
