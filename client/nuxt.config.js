@@ -14,6 +14,7 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
+    '@/assets/scss/main.scss'
   ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -35,6 +36,8 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    // https://github.com/Developmint/nuxt-webfontloader
+    'nuxt-webfontloader'
   ],
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
@@ -44,6 +47,19 @@ export default {
   pwa: {
     manifest: {
       lang: 'en'
+    }
+  },
+
+  webfontloader: {
+    custom: {
+      families: [
+        'Poppins:n3,n4,n6,n7',
+        'Roboto:n3,n4,n7'
+      ],
+      urls: [
+        'https://fonts.googleapis.com/css?family=Poppins:300,400,600,700&display=swap',
+        'https://fonts.googleapis.com/css?family=Roboto:300,400,700&display=swap'
+      ]
     }
   },
 
