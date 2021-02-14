@@ -1,5 +1,5 @@
 <template>
-  <div class="main-title">
+  <div class="main-title pb-6">
     <div class="is-block">
       <slot name="first-line"></slot>
     </div>
