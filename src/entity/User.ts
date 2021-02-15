@@ -1,6 +1,12 @@
 import {Entity, PrimaryGeneratedColumn, Column, Unique} from "typeorm";
 import {IsEmail, IsNotEmpty} from "class-validator";
 
+export enum UserRole {
+    ADMIN = "ROLE_ADMIN",
+    CLIENT = "ROLE_CLIENT",
+    BASIC = "ROLE_BASIC"
+}
+
 @Entity()
 @Unique(['email'])
 export class User {
@@ -24,7 +30,11 @@ export class User {
     @IsEmail()
     email: string
 
-    @Column()
+    @Column({
+        type: "enum",
+        enum: UserRole,
+        default: UserRole.BASIC
+    })
     @IsNotEmpty()
-    role: string;
+    role: UserRole;
 }

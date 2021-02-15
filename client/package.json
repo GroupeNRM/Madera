@@ -14,7 +14,8 @@
     "@nuxtjs/pwa": "^3.3.5",
     "core-js": "^3.8.3",
     "nuxt": "^2.14.12",
-    "nuxt-buefy": "^0.4.4"
+    "nuxt-buefy": "^0.4.4",
+    "nuxt-webfontloader": "^1.1.0"
   },
   "devDependencies": {
     "@vue/test-utils": "^1.1.2",
@@ -22,6 +23,8 @@
     "babel-jest": "^26.6.3",
     "bulma": "^0.9.1",
     "jest": "^26.6.3",
+    "node-sass": "^4.14.1",
+    "sass-loader": "^8.0.2",
     "vue-jest": "^3.0.4"
   }
 }
