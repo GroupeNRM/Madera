@@ -9,7 +9,7 @@
         role="alert"
         v-model="isNotificationOpen"
         position="is-top-right"
-        :duration="notificationDuration"
+        :duration="3000"
         :auto-close="true">
         Une erreur est survenue, veuillez réessayer plus tard.
       </b-notification>
@@ -93,7 +93,6 @@ export default {
       devis: undefined,
 
       isNotificationOpen: false,
-      notificationDuration: 3000,
 
       validationFields: {
         client: {
@@ -113,7 +112,6 @@ export default {
           message: "Merci de choisir une date de création"
         }
       },
-      formError: false
     }
   },
   methods: {
@@ -124,8 +122,6 @@ export default {
       !this.devis ? this.validationFields.devis.status = "is-danger" : this.validationFields.devis.status = "is-success";
       !this.libelle ? this.validationFields.libelle.status = "is-danger" : this.validationFields.libelle.status = "is-success";
       !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
-
-      console.log(this.validationFields.client.status);
 
       if(!(this.validationFields.client.status === "is-danger" || this.validationFields.devis.status === "is-danger" || this.validationFields.libelle.status === "is-danger" || this.validationFields.date.status === "is-danger")) {
         this.$nuxt.$loading.start()
