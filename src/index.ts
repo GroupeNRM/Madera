@@ -22,7 +22,7 @@ createConnection().then(async connection => {
     app.use(
         cors({
             credentials: true,
-            origin: `http://localhost:${port}`
+            origin: `http://localhost:8000`
         })
     );
 

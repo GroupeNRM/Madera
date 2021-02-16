@@ -1,0 +1,43 @@
+@import "variables";
+
+::selection {
+  background-color: $selection-grey;
+}
+
+body {
+  color: $primary-dark;
+
+  .navbar {
+    font-family: "Roboto", serif;
+    font-weight: bold;
+  }
+
+  .main-title {
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-size: $main-title-size;
+
+    .colored-text {
+      color: $primary;
+    }
+  }
+
+  .is-fixed-top {
+    position: fixed;
+    z-index: 100;
+    top: 100px;
+    right: 0;
+    max-width: 450px;
+  }
+
+  .form-container {
+    max-width: 998px;
+    margin: auto;
+  }
+}
+
+// Import bulma styles
+@import "~bulma";
+
+// Import buefy styles
+@import "~buefy/src/scss/buefy";
