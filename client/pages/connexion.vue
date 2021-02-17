@@ -1,5 +1,19 @@
 <template>
   <div class="columns is-vcentered">
+    <div class="is-fixed-top">
+      <b-notification
+        type="is-danger"
+        aria-close-label="Close notification"
+        role="alert"
+        v-model="isNotificationOpen"
+        position="is-top-right"
+        :duration="3000"
+        :auto-close="true"
+        :closable="false">
+        Une erreur est survenue, veuillez réessayer plus tard.
+      </b-notification>
+    </div>
+
     <div class="column is-6">
       <img
         src="~assets/img/IMG_BACKGROUND_LOGIN.jpg"
@@ -81,6 +95,8 @@ export default {
       inputMail: null,
       inputPassword: null,
 
+      isNotificationOpen: false,
+
       validationFields: {
         email: {
           status: "",
@@ -108,13 +124,11 @@ export default {
         .then((res) => {
           this.$nuxt.$loading.finish()
           console.log(res)
-          alert("OK")
-          // TODO : Traitement post-connexion validée
         })
         .catch((err) => {
-          this.$nuxt.$loading.finish()
+          this.isNotificationOpen = true
           console.log(err)
-          // TODO : Alerte JS
+          this.$nuxt.$loading.finish()
         })
       }
     }
