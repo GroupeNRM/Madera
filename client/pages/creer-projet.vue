@@ -2,6 +2,19 @@
 
 <template>
   <div>
+    <div class="is-fixed-top">
+      <b-notification
+        type="is-danger"
+        aria-close-label="Close notification"
+        role="alert"
+        v-model="isNotificationOpen"
+        position="is-top-right"
+        :duration="3000"
+        :auto-close="true">
+        Une erreur est survenue, veuillez réessayer plus tard.
+      </b-notification>
+    </div>
+
     <MainTitle>
       <span slot="first-line">Créer un</span>
       <span slot="second-line">nouveau projet</span>
@@ -51,7 +64,7 @@
       </div>
 
       <div class="column is-full has-text-centered">
-        <b-button type="is-info is-light" v-on:click="sendData">Créer le projet</b-button>
+        <b-button type="is-info" v-on:click="sendData" outlined>Créer le projet</b-button>
       </div>
     </form>
   </div>
@@ -60,6 +73,17 @@
 <script>
 export default {
   name: "creer-projet",
+  head() {
+    return {
+      title: "Créer un nouveau projet",
+      meta: [
+        {
+          hid: "description",
+          content: "Page permettant de créer un nouveau projet de maisons modulaires"
+        }
+      ]
+    }
+  },
   data() {
     return {
       selectedDate: new Date(),
@@ -67,6 +91,8 @@ export default {
       libelle: "",
       client: undefined,
       devis: undefined,
+
+      isNotificationOpen: false,
 
       validationFields: {
         client: {
@@ -79,22 +105,45 @@ export default {
         },
         libelle: {
           status: "",
-          message: "Merci de rentrer un libellé"
+          message: "Merci de saisir un libellé"
         },
         date: {
           status: "",
           message: "Merci de choisir une date de création"
         }
-      }
+      },
     }
   },
   methods: {
-    sendData: function() {
+    sendData: async function() {
+      // Spaghetti zone
+
       !this.client ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
       !this.devis ? this.validationFields.devis.status = "is-danger" : this.validationFields.devis.status = "is-success";
       !this.libelle ? this.validationFields.libelle.status = "is-danger" : this.validationFields.libelle.status = "is-success";
       !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
-    }
+
+      if(!(this.validationFields.client.status === "is-danger" || this.validationFields.devis.status === "is-danger" || this.validationFields.libelle.status === "is-danger" || this.validationFields.date.status === "is-danger")) {
+        this.$nuxt.$loading.start()
+        await this.$axios.$post('http://localhost:3000/project', {
+          "client": this.client,
+          "devis": this.devis,
+          "libelle": this.libelle,
+          "dateCreation": this.selectedDate
+        })
+        .then((res) => {
+          this.$nuxt.$loading.finish()
+          // TODO redirect to newly created project
+        })
+        .catch((err) => {
+          {
+            this.isNotificationOpen = true;
+            console.error(err);
+            this.$nuxt.$loading.finish()
+          }
+        });
+      }
+    },
   }
 }
 </script>

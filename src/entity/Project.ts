@@ -14,6 +14,9 @@ export class Project {
     @Column()
     libelle: string
 
+    @Column()
+    dateCreation: Date
+
     @CreateDateColumn()
     createdAt: Date
 
