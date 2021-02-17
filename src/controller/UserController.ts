@@ -85,7 +85,7 @@ export class UserController {
             return response.status(404).send({message: "Aucun utilisateur avec cette adresse e-mail"});
         }
 
-        const passwordValid = argon2.verify(user.password, password);
+        const passwordValid = await argon2.verify(user.password, password);
         if(!passwordValid) {
             return response.status(401).send({message: "Le mot de passe ne correspond pas"})
         }

@@ -18,19 +18,19 @@
 
         <b-field label="E-mail" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
           <b-input
-            v-model="email"
-            v-on:input="validationFields.email.status = ''"
             type="email"
+            v-model="inputMail"
+            v-on:input="validationFields.email.status = ''"
             placeholder="johnDoe@domain.fr"
             icon="email">
           </b-input>
         </b-field>
 
-        <b-field label="Mot de passe" :type="validationFields.motDePasse.status" :message="validationFields.motDePasse.status === 'is-danger' ? validationFields.motDePasse.message : ''">
+        <b-field label="Mot de passe" :type="validationFields.password.status" :message="validationFields.password.status === 'is-danger' ? validationFields.password.message : ''">
           <b-input
             type="password"
-            v:model="motDePasse"
-            v-on:input="validationFields.motDePasse.status = ''"
+            v-model="inputPassword"
+            v-on:input="validationFields.password.status = ''"
             placeholder="************"
             icon="shield-key-outline"
             password-reveal>
@@ -78,15 +78,15 @@ export default {
   },
   data(){
     return {
-      email: undefined,
-      motDePasse: undefined,
+      inputMail: null,
+      inputPassword: null,
 
       validationFields: {
         email: {
           status: "",
           message: "Merci de saisir votre adresse mail"
         },
-        motDePasse: {
+        password: {
           status: "",
           message: "Merci de saisir votre mot de passe"
         }
@@ -94,14 +94,28 @@ export default {
     }
   },
   methods: {
-    checkLogin: function(){
-      !this.email ? this.validationFields.email.status = "is-danger" : this.validationFields.email.status = "is-success";
-      !this.motDePasse ? this.validationFields.motDePasse.status = "is-danger" : this.validationFields.motDePasse.status = "is-success";
+    checkLogin: async function(){
+      !this.inputMail ? this.validationFields.email.status = "is-danger" : this.validationFields.email.status = "is-success";
+      !this.inputPassword ? this.validationFields.password.status = "is-danger" : this.validationFields.password.status = "is-success";
 
-      if(!(this.validationFields.email.status === "is-danger" || this.validationFields.motDePasse.status === "is-danger")){
-        // TODO : Nuxt Loading Start
-        // TODO : Axios GET + Traitement
-        alert("CACA");
+      if(!(this.validationFields.email.status === "is-danger" || this.validationFields.password.status === "is-danger")){
+        this.$nuxt.$loading.start()
+
+        await this.$axios.$post('http://localhost:3000/user/login', {
+          "email": this.inputMail,
+          "password": this.inputPassword
+        })
+        .then((res) => {
+          this.$nuxt.$loading.finish()
+          console.log(res)
+          alert("OK")
+          // TODO : Traitement post-connexion validée
+        })
+        .catch((err) => {
+          this.$nuxt.$loading.finish()
+          console.log(err)
+          // TODO : Alerte JS
+        })
       }
     }
   }
