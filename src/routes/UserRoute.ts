@@ -10,6 +10,6 @@ router.get('/:id([0-9]+)', UserController.getOneById);
 
 router.post('/', UserController.register);
 
-router.post('/login', UserController.login)
+router.post('/login', UserController.login);
 
 export default router;
