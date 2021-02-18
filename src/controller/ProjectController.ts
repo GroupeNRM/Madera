@@ -22,4 +22,19 @@ export class ProjectController {
 
         response.send(project);
     }
+
+    static findOneById = async (request: Request, response: Response) => {
+        const projectRepository = getRepository(Project);
+        let project: Project;
+
+        try {
+            project = await projectRepository.findOneOrFail(request.params.id, {
+                select: ["id", "client", "devis", "libelle", "dateCreation"]
+            });
+        } catch (e) {
+            return response.status(404).send({message: "Project not found"})
+        }
+
+        response.send(project);
+    }
 }

@@ -5,4 +5,6 @@ const router = Router();
 
 router.post('/', ProjectController.createProject);
 
+router.get('/:id([0-9]+)', ProjectController.findOneById)
+
 export default router;

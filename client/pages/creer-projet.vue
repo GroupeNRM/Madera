@@ -131,9 +131,9 @@ export default {
           "libelle": this.libelle,
           "dateCreation": this.selectedDate
         })
-        .then((res) => {
+        .then(({id}) => {
           this.$nuxt.$loading.finish()
-          // TODO redirect to newly created project
+          this.$router.push(`/consulter-projet/${id}`);
         })
         .catch((err) => {
           {
