@@ -16,25 +16,26 @@
 
         <div>
           <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
-          <b-button class="pl-6 pr-6" type="is-danger">Archiver</b-button>
+          <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive">Archiver</b-button>
         </div>
       </div>
 
-
+      <h3>Plus d'informations</h3>
       <div class="columns">
         <div class="column">
-          <InfoCard icon="calendar">
+          <InfoCard icon="calendar-outline">
             <span slot="text-data">{{projectData.dateCreation}}</span>
           </InfoCard>
         </div>
         <div class="column">
-          Second column
+          <InfoCard icon="account-outline">
+            <span slot="text-data">{{projectData.client}}</span>
+          </InfoCard>
         </div>
         <div class="column">
-          Third column
-        </div>
-        <div class="column">
-          Fourth column
+          <InfoCard icon="map-marker-outline">
+            <span slot="text-data">{{projectData.client}}</span>
+          </InfoCard>
         </div>
       </div>
     </div>
@@ -62,6 +63,19 @@ export default {
   async fetch() {
     this.projectData = await this.$axios.$get(`http://localhost:3000/project/${this.$route.params.id}`);
     console.log(this.projectData)
+  },
+  methods: {
+    confirmArchive() {
+      this.$buefy.dialog.confirm({
+        title: 'Archivage du projet',
+        message: 'Êtes vous certain de vouloir archiver le projet ? Aucune modification ne sera possible.',
+        confirmText: 'Confirmer',
+        cancelText: 'Annuler',
+        type: 'is-danger',
+        hasIcon: true,
+        onConfirm: () => this.$buefy.toast.open('Account deleted!')
+      })
+    }
   }
 }
 </script>
@@ -78,5 +92,11 @@ export default {
     li:not(:first-child) {
       font-size: 28px;
     }
+  }
+
+  h3 {
+    font-family: "Poppins", serif;
+    font-weight: bold;
+    font-size: 45px;
   }
 </style>

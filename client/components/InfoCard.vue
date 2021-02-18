@@ -1,8 +1,10 @@
 <template>
-  <p class="info-card pl-4">
-    <b-icon class="is-vertically-aligned pr-3" :icon="icon" size="is-medium"></b-icon>
-    <slot name="text-data"></slot>
-  </p>
+  <div class="info-card pl-4">
+    <p>
+      <b-icon class="is-vertically-aligned pr-3 is-inline" :icon="icon" size="is-medium"></b-icon>
+      <slot name="text-data"></slot>
+    </p>
+  </div>
 </template>
 
 <script>
@@ -22,6 +24,8 @@ export default {
   }
 
   .info-card {
+    font-family: "Roboto", serif;
+
     border-left: 10px solid $primary;
     border-top: 1px solid $light-grey;
     border-right: 1px solid $light-grey;
