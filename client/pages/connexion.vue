@@ -10,7 +10,7 @@
         :duration="3000"
         :auto-close="true"
         :closable="false">
-        Une erreur est survenue, veuillez réessayer plus tard.
+        {{errorMessage}}
       </b-notification>
     </div>
 
@@ -106,7 +106,9 @@ export default {
           status: "",
           message: "Merci de saisir votre mot de passe"
         }
-      }
+      },
+
+      errorMessage: "Une erreur est survenue, veuillez réessayer plus tard."
     }
   },
   methods: {
@@ -126,8 +128,12 @@ export default {
           console.log(res)
         })
         .catch((err) => {
+          if(err.response?.status === 401) {
+            this.errorMessage = err.response.data.message;
+          } else {
+            this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+          }
           this.isNotificationOpen = true
-          console.log(err)
           this.$nuxt.$loading.finish()
         })
       }

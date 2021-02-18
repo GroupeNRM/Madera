@@ -82,7 +82,7 @@ export class UserController {
         })
 
         if(!user) {
-            return response.status(404).send({message: "Aucun utilisateur avec cette adresse e-mail"});
+            return response.status(401).send({message: "Aucun utilisateur avec cette adresse e-mail"});
         }
 
         const passwordValid = await argon2.verify(user.password, password);
