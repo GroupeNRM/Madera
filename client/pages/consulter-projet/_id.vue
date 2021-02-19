@@ -16,7 +16,7 @@
 
         <div>
           <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
-          <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive">Archiver</b-button>
+          <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive" :disabled="!projectData.isActive">Archiver</b-button>
         </div>
       </div>
 
@@ -57,7 +57,10 @@ export default {
   },
   data() {
     return {
-      projectData: []
+      projectData: [],
+      isNotificationOpen: false,
+      notificationType: "is-danger",
+      notificationMessage: "Une erreur est survenue, veuillez réessayer plus tard."
     }
   },
   async fetch() {
@@ -66,6 +69,7 @@ export default {
   },
   methods: {
     confirmArchive() {
+      this.$nuxt.$loading.start();
       this.$buefy.dialog.confirm({
         title: 'Archivage du projet',
         message: 'Êtes vous certain de vouloir archiver le projet ? Aucune modification ne sera possible.',
@@ -73,7 +77,28 @@ export default {
         cancelText: 'Annuler',
         type: 'is-danger',
         hasIcon: true,
-        onConfirm: () => this.$buefy.toast.open('Account deleted!')
+        onConfirm: async () => await this.$axios.put(`http://localhost:3000/project/${this.$route.params.id}`)
+          .then(() => {
+            this.projectData.isActive = false;
+            this.$buefy.notification.open({
+              message: 'Le projet a bien été archivé !',
+              type: 'is-success',
+              duration: 3000,
+              closable: false,
+              autoclose: true
+            })
+            this.$nuxt.$loading.finish();
+          })
+          .catch(() => {
+            this.$buefy.notification.open({
+              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoclose: true
+            })
+            this.$nuxt.$loading.finish();
+          })
       })
     }
   }

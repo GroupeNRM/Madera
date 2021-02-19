@@ -22,14 +22,6 @@ body {
     }
   }
 
-  .is-fixed-top {
-    position: fixed;
-    z-index: 100;
-    top: 100px;
-    right: 0;
-    max-width: 450px;
-  }
-
   .form-container {
     max-width: 998px;
     margin: auto;
@@ -43,6 +35,10 @@ body {
 
   .modal-card-head, .modal-card-foot {
     background: white;
+  }
+
+  .notification {
+    top: 100px;
   }
 }
 

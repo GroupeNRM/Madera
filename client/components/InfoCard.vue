@@ -1,6 +1,6 @@
 <template>
   <div class="info-card pl-4">
-    <p>
+    <p class="pt-2 pb-2">
       <b-icon class="is-vertically-aligned pr-3 is-inline" :icon="icon" size="is-medium"></b-icon>
       <slot name="text-data"></slot>
     </p>
@@ -33,8 +33,5 @@ export default {
 
     box-shadow: 0 2px 2px rgba(0, 0, 0, 0.25);
     border-radius: 5px;
-
-    height: 65px;
-    line-height: 61px;
   }
 </style>
