@@ -1,22 +1,29 @@
 <template>
   <div>
-    <MainTitle>
-      <span slot="first-line">Consulter le</span>
-      <span slot="second-line">projet n°{{this.$route.params.id}}</span>
-    </MainTitle>
+
     <p v-if="$fetchState.pending">Fetching project...</p>
     <p v-else-if="$fetchState.error">An error occurred :(</p>
     <div v-else>
       <div class="main-content mb-6">
-        <ul class="info-project mb-3">
-          <li>{{ projectData.client }}</li>
-          <li>Projet : <span class="has-text-primary">{{ projectData.libelle }}</span></li>
-          <li>{{ projectData.devis }}</li>
-        </ul>
+        <div class="columns is-mobile">
+          <div class="column is-12-mobile is-6-tablet is-6-desktop">
+            <MainTitle>
+              <span slot="first-line">Consulter le</span>
+              <span slot="second-line">projet n°{{this.$route.params.id}}</span>
+            </MainTitle>
 
-        <div>
-          <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
-          <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive" :disabled="!projectData.isActive">Archiver</b-button>
+            <ul class="info-project mb-3">
+              <li>{{ projectData.client }}</li>
+              <li>Projet : <span class="has-text-primary">{{ projectData.libelle }}</span></li>
+              <li>{{ projectData.devis }}</li>
+            </ul>
+
+            <div>
+              <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
+              <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive" :disabled="!projectData.isActive">Archiver</b-button>
+            </div>
+          </div>
+          <img class="column is-0-mobile is-0-tablet is-6-desktop" src="~assets/img/modular_house.png" alt="">
         </div>
       </div>
 
@@ -110,7 +117,7 @@ export default {
     font-family: "Poppins", serif;
     font-weight: bold;
 
-    &:first-child {
+    li:first-child {
       font-size: 40px;
     }
 
