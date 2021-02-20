@@ -22,6 +22,11 @@ body {
     }
   }
 
+  .backmenu-link {
+    font-family: "Poppins", serif;
+    color: $grey-link
+  }
+
   .form-container {
     max-width: 998px;
     margin: auto;

@@ -1,12 +1,12 @@
 <template>
   <div>
-
     <p v-if="$fetchState.pending">Fetching project...</p>
     <p v-else-if="$fetchState.error">An error occurred :(</p>
     <div v-else>
       <div class="main-content mb-6">
         <div class="columns is-mobile">
           <div class="column is-12-mobile is-6-tablet is-6-desktop">
+            <NuxtLink to="/consulter-projet" class="backmenu-link is-size-2 has-text-weight-bold"><b-icon class="pr-5" icon="arrow-left" size="is-small"></b-icon>Revenir aux projets</NuxtLink>
             <MainTitle>
               <span slot="first-line">Consulter le</span>
               <span slot="second-line">projet n°{{this.$route.params.id}}</span>
@@ -27,22 +27,24 @@
         </div>
       </div>
 
-      <h3>Plus d'informations</h3>
-      <div class="columns">
-        <div class="column">
-          <InfoCard icon="calendar-outline">
-            <span slot="text-data">{{projectData.dateCreation}}</span>
-          </InfoCard>
-        </div>
-        <div class="column">
-          <InfoCard icon="account-outline">
-            <span slot="text-data">{{projectData.client}}</span>
-          </InfoCard>
-        </div>
-        <div class="column">
-          <InfoCard icon="map-marker-outline">
-            <span slot="text-data">{{projectData.client}}</span>
-          </InfoCard>
+      <div class="pt-6">
+        <h3 class="has-text-weight-bold">Plus d'informations</h3>
+        <div class="columns">
+          <div class="column">
+            <InfoCard icon="calendar-outline">
+              <span slot="text-data">{{projectData.dateCreation}}</span>
+            </InfoCard>
+          </div>
+          <div class="column">
+            <InfoCard icon="account-outline">
+              <span slot="text-data">{{projectData.client}}</span>
+            </InfoCard>
+          </div>
+          <div class="column">
+            <InfoCard icon="map-marker-outline">
+              <span slot="text-data">{{projectData.client}}</span>
+            </InfoCard>
+          </div>
         </div>
       </div>
     </div>
@@ -128,7 +130,6 @@ export default {
 
   h3 {
     font-family: "Poppins", serif;
-    font-weight: bold;
     font-size: 45px;
   }
 </style>
