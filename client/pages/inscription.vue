@@ -172,9 +172,36 @@ export default {
 
       if(!(this.validationFields.firstname.status === "is-danger" || this.validationFields.lastname.status === "is-danger" || this.validationFields.email.status === "is-danger" || this.validationFields.password.status === "is-danger" || this.validationFields.repeatPassword.status === "is-danger")){
         if(this.inputPassword === this.inputRepeatPassword){
-          this.statusBar = "is-success";
-          this.errorMessage = "Test formulaire OK";
-          this.isNotificationOpen = true
+          /* TODO : REGEX vérifier nom de domaine en "@madera.xx" */
+          /* TODO : Requete GET vérifier si email utilisateur deja existant */
+
+          this.$nuxt.$loading.start();
+
+          /* Requête POST : Ajout compte utilisateur Madera */
+          await this.$axios.$post('http://localhost:3000/user/', {
+            "firstName": this.inputFirstName,
+            "lastName": this.inputLastName,
+            "password": this.inputRepeatPassword,
+            "age": 20, // L'âge ne sert à rien dans le contexte de l'application, je fixe une valeur par défaut
+            "email": this.inputMail,
+            "role": "ROLE_BASIC"
+          })
+            .then((res) => {
+              this.$nuxt.$loading.finish()
+              console.log(res)
+              this.statusBar = "is-success";
+              this.errorMessage = "Votre compte a bien été crée";
+              this.isNotificationOpen = true;
+            })
+            .catch((err) => {
+              if(err.response?.status === 401) {
+                this.errorMessage = err.response.data.message;
+              } else {
+                this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+              }
+              this.isNotificationOpen = true;
+              this.$nuxt.$loading.finish();
+            })
         } else {
           this.validationFields.password.status = "is-danger"
           this.validationFields.password.message = "Les mots de passe saisient ne sont pas identiques"
