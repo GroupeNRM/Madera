@@ -1,6 +1,7 @@
 <template>
   <div class="columns is-vcentered">
     <div class="is-fixed-top">
+      <!-- Alerte Notification -->
       <b-notification
         type="is-danger"
         aria-close-label="Close notification"
@@ -14,6 +15,7 @@
       </b-notification>
     </div>
 
+    <!-- IMG Madera -->
     <div class="column is-6">
       <img
         src="~assets/img/IMG_BACKGROUND_LOGIN.jpg"
@@ -24,12 +26,14 @@
     <div class="column is-6">
       <section class="section">
         <div class="has-text-centered">
+          <!-- Logo Madera -->
           <img
             src="~assets/logo_madera.svg"
             alt="Logo Madera"
           >
         </div>
 
+        <!-- Input Text : E-Mail -->
         <b-field label="E-mail" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
           <b-input
             type="email"
@@ -40,6 +44,7 @@
           </b-input>
         </b-field>
 
+        <!-- Input Text : Password -->
         <b-field label="Mot de passe" :type="validationFields.password.status" :message="validationFields.password.status === 'is-danger' ? validationFields.password.message : ''">
           <b-input
             type="password"
@@ -51,10 +56,12 @@
           </b-input>
         </b-field>
 
+        <!-- Checkbox : Save account -->
         <b-field>
           <b-checkbox>Se souvenir de moi</b-checkbox>
         </b-field>
 
+        <!-- Button : Log In -->
         <div class="has-text-centered">
           <b-button
             type="is-info"
@@ -64,9 +71,10 @@
           </b-button>
         </div>
 
+        <!-- Link : Register -->
         <div class="has-text-centered mt-3">
           <a
-            href="#"
+            href="/inscription"
             class="is-link">
             Pas de compte ? Inscrivez-vous
           </a>
