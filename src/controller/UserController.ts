@@ -95,7 +95,12 @@ export class UserController {
         response.send(user);
     }
 
-    //@TODO
+    /**
+     * Delete Madera user account
+     * @param request
+     * @param response
+     * @param next
+     */
     static async remove(request: Request, response: Response, next: NextFunction) {
         const userRepository = getRepository(User);
         let userToRemove = await userRepository.findOne(request.params.id);

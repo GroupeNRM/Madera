@@ -173,7 +173,6 @@ export default {
       if(!(this.validationFields.firstname.status === "is-danger" || this.validationFields.lastname.status === "is-danger" || this.validationFields.email.status === "is-danger" || this.validationFields.password.status === "is-danger" || this.validationFields.repeatPassword.status === "is-danger")){
         if(this.inputPassword === this.inputRepeatPassword){
           /* TODO : REGEX vérifier nom de domaine en "@madera.xx" */
-          /* TODO : Requete GET vérifier si email utilisateur deja existant */
 
           this.$nuxt.$loading.start();
 
@@ -187,8 +186,12 @@ export default {
             "role": "ROLE_BASIC"
           })
             .then((res) => {
+              console.log("POST Request : New Madera acccount => " + res)
+
+              /* TODO : Requete GET vérifier si email utilisateur deja existant */
+
               this.$nuxt.$loading.finish()
-              console.log(res)
+              console.log("POST Request : New Madera acccount => " + res)
               this.statusBar = "is-success";
               this.errorMessage = "Votre compte a bien été crée";
               this.isNotificationOpen = true;
