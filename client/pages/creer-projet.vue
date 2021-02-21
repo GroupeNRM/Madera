@@ -2,19 +2,6 @@
 
 <template>
   <div>
-    <div class="is-fixed-top">
-      <b-notification
-        type="is-danger"
-        aria-close-label="Close notification"
-        role="alert"
-        v-model="isNotificationOpen"
-        position="is-top-right"
-        :duration="3000"
-        :auto-close="true">
-        Une erreur est survenue, veuillez réessayer plus tard.
-      </b-notification>
-    </div>
-
     <MainTitle>
       <span slot="first-line">Créer un</span>
       <span slot="second-line">nouveau projet</span>
@@ -92,8 +79,6 @@ export default {
       client: undefined,
       devis: undefined,
 
-      isNotificationOpen: false,
-
       validationFields: {
         client: {
           status: "",
@@ -131,14 +116,27 @@ export default {
           "libelle": this.libelle,
           "dateCreation": this.selectedDate
         })
-        .then((res) => {
+        .then(({id}) => {
+          this.$buefy.notification.open({
+            message: 'Le projet a bien été crée !',
+            type: 'is-success',
+            duration: 3000,
+            closable: false,
+            autoclose: true
+          });
           this.$nuxt.$loading.finish()
-          // TODO redirect to newly created project
+          this.$router.push(`/consulter-projet/${id}`);
         })
         .catch((err) => {
           {
-            this.isNotificationOpen = true;
-            console.error(err);
+            this.$buefy.notification.open({
+              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoclose: true
+            });
+            console.log(err);
             this.$nuxt.$loading.finish()
           }
         });

@@ -16,9 +16,7 @@
         <b-navbar-item href="#">
           Créer un devis
         </b-navbar-item>
-        <b-navbar-item href="#">
-          Consulter les projets
-        </b-navbar-item>
+        <NuxtLink to="/consulter-projet" class="navbar-item">Consulter les projets</NuxtLink>
         <b-navbar-item href="#">
           Consulter les devis
         </b-navbar-item>

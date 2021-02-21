@@ -22,4 +22,36 @@ export class ProjectController {
 
         response.send(project);
     }
+
+    static findOneById = async (request: Request, response: Response) => {
+        const projectRepository = getRepository(Project);
+        let project: Project;
+
+        try {
+            project = await projectRepository.findOneOrFail(request.params.id, {
+                select: ["id", "client", "devis", "libelle", "dateCreation", "isActive"]
+            });
+        } catch (e) {
+            return response.status(404).send({message: "Project not found"})
+        }
+
+        response.send(project);
+    }
+
+    static archiveProject = async (request: Request, response: Response) => {
+        const projectRepository = getRepository(Project);
+        const id = request.params.id;
+        let project: Project;
+
+        try {
+            project = await projectRepository.findOneOrFail(id);
+            project.isActive = false;
+
+            await projectRepository.save(project);
+        } catch (e) {
+            return response.status(404).send({message: "Project not found"});
+        }
+
+        return response.send(project);
+    }
 }

@@ -17,6 +17,11 @@ export class Project {
     @Column()
     dateCreation: Date
 
+    @Column({
+        default: true
+    })
+    isActive: boolean
+
     @CreateDateColumn()
     createdAt: Date
 
