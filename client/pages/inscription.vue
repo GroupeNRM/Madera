@@ -37,10 +37,10 @@
         <b-field label="Nom" :type="validationFields.firstname.status" :message="validationFields.firstname.status === 'is-danger' ? validationFields.firstname.message : ''">
           <b-input
             type="text"
+            v-model="inputFirstName"
+            v-on:input="validationFields.firstname.status = ''"
             placeholder="DOE"
-            icon="account"
-            v-model:="inputFirstName"
-            v-on:input="validationFields.firstname.status = ''">
+            icon="account">
           </b-input>
         </b-field>
 
@@ -48,10 +48,10 @@
         <b-field label="Prénom" :type="validationFields.lastname.status" :message="validationFields.lastname.status === 'is-danger' ? validationFields.lastname.message : ''">
           <b-input
             type="text"
+            v-model="inputLastName"
+            v-on:input="validationFields.lastname.status = ''"
             placeholder="John"
-            icon="account"
-            v-model:="inputLastName"
-            v-on:input="validationFields.lastname.status = ''">
+            icon="account">
           </b-input>
         </b-field>
 
@@ -59,10 +59,10 @@
         <b-field label="Prénom" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
           <b-input
             type="email"
+            v-model="inputMail"
+            v-on:input="validationFields.email.status = ''"
             placeholder="johnDoe@madera.fr"
-            icon="email"
-            v-model:="inputMail"
-            v-on:input="validationFields.email.status = ''">
+            icon="email">
           </b-input>
         </b-field>
 
@@ -70,23 +70,21 @@
         <b-field label="Mot de passe" :type="validationFields.password.status" :message="validationFields.password.status === 'is-danger' ? validationFields.password.message : ''">
           <b-input
             type="password"
-            placeholder="**********"
-            icon="shield-key-outline"
-            v-model:="inputPassword"
+            v-model="inputPassword"
             v-on:input="validationFields.password.status = ''"
-            password-reveal>
+            placeholder="**********"
+            icon="shield-key-outline">
           </b-input>
         </b-field>
 
-        <!-- Input Text : Repeat Password -->
+        <!-- Input Text : Repeat password -->
         <b-field label="Répéter mot de passe" :type="validationFields.repeatPassword.status" :message="validationFields.repeatPassword.status === 'is-danger' ? validationFields.repeatPassword.message : ''">
           <b-input
             type="password"
-            placeholder="**********"
-            icon="shield-key-outline"
-            v-model:="inputRepeatPassword"
+            v-model="inputRepeatPassword"
             v-on:input="validationFields.repeatPassword.status = ''"
-            password-reveal>
+            placeholder="**********"
+            icon="shield-key-outline">
           </b-input>
         </b-field>
 
@@ -153,11 +151,11 @@ export default {
         },
         password: {
           status: "",
-          message: "Merci de saisir votre mot de passe"
+          message: "Merci de saisir un mot de passe"
         },
         repeatPassword: {
           status: "",
-          message: "Merci de saisir votre mot de passe"
+          message: "Merci de saisir à nouveau votre mot de passe"
         }
       },
 
@@ -176,9 +174,13 @@ export default {
         if(this.inputPassword === this.inputRepeatPassword){
           this.statusBar = "is-success";
           this.errorMessage = "Test formulaire OK";
+          this.isNotificationOpen = true
         } else {
-          this.statusBar = "is-danger";
-          this.errorMessage = "Mot de passe non identiques.";
+          this.validationFields.password.status = "is-danger"
+          this.validationFields.password.message = "Les mots de passe saisient ne sont pas identiques"
+
+          this.validationFields.repeatPassword.status = "is-danger"
+          this.validationFields.repeatPassword.message = "Les mots de passe saisient ne sont pas identiques"
         }
       }
     }
