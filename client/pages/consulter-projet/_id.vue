@@ -4,8 +4,8 @@
     <p v-else-if="$fetchState.error">An error occurred :(</p>
     <div v-else>
       <div class="main-content mb-6">
-        <div class="columns is-mobile">
-          <div class="column is-12-mobile is-6-tablet is-6-desktop">
+        <div class="columns is-multiline">
+          <div class="column">
             <NuxtLink to="/consulter-projet" class="backmenu-link is-size-2 has-text-weight-bold"><b-icon class="pr-5" icon="arrow-left" size="is-small"></b-icon>Revenir aux projets</NuxtLink>
             <MainTitle>
               <span slot="first-line">Consulter le</span>
@@ -23,7 +23,11 @@
               <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive" :disabled="!projectData.isActive">Archiver</b-button>
             </div>
           </div>
-          <img class="column is-0-mobile is-0-tablet is-6-desktop" src="~assets/img/modular_house.png" alt="">
+          <div class="column is-0-tablet-only">
+            <figure class="is-inline-block">
+              <img src="~assets/img/modular_house.png" alt="Plan de la maison modulaire" class="image">
+            </figure>
+          </div>
         </div>
       </div>
 
@@ -78,7 +82,6 @@ export default {
   },
   methods: {
     confirmArchive() {
-      this.$nuxt.$loading.start();
       this.$buefy.dialog.confirm({
         title: 'Archivage du projet',
         message: 'Êtes vous certain de vouloir archiver le projet ? Aucune modification ne sera possible.',
@@ -86,28 +89,31 @@ export default {
         cancelText: 'Annuler',
         type: 'is-danger',
         hasIcon: true,
-        onConfirm: async () => await this.$axios.put(`http://localhost:3000/project/${this.$route.params.id}`)
-          .then(() => {
-            this.projectData.isActive = false;
-            this.$buefy.notification.open({
-              message: 'Le projet a bien été archivé !',
-              type: 'is-success',
-              duration: 3000,
-              closable: false,
-              autoclose: true
+        onConfirm: async () => {
+          this.$nuxt.$loading.start();
+          await this.$axios.put(`http://localhost:3000/project/${this.$route.params.id}`)
+            .then(() => {
+              this.projectData.isActive = false;
+              this.$buefy.notification.open({
+                message: 'Le projet a bien été archivé !',
+                type: 'is-success',
+                duration: 3000,
+                closable: false,
+                autoclose: true
+              })
+              this.$nuxt.$loading.finish();
             })
-            this.$nuxt.$loading.finish();
-          })
-          .catch(() => {
-            this.$buefy.notification.open({
-              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
-              type: 'is-danger',
-              duration: 3000,
-              closable: false,
-              autoclose: true
+            .catch(() => {
+              this.$buefy.notification.open({
+                message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+                type: 'is-danger',
+                duration: 3000,
+                closable: false,
+                autoclose: true
+              })
+              this.$nuxt.$loading.finish();
             })
-            this.$nuxt.$loading.finish();
-          })
+        }
       })
     }
   }
