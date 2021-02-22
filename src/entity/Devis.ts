@@ -9,7 +9,7 @@ export class Devis {
     id: number
 
     @Column({type: "varchar", length:45 })
-    reference: string
+    libelle: string
 
     @Column({type: "varchar", length: 45})
     etat: string
@@ -22,6 +22,14 @@ export class Devis {
 
     @Column({type: "double"})
     remise: number
+
+    @CreateDateColumn()
+    dateCreation: Date
+
+    @Column({
+        default: true
+    })
+    isActive: boolean
 
     @CreateDateColumn()
     createdAt: Date

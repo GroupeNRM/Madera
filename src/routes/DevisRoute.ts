@@ -5,4 +5,6 @@ const router = Router();
 
 router.post('/', DevisController.createDevis);
 
+router.get('/:id([0-9]+)', DevisController.findOneById)
+
 export default router;

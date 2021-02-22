@@ -173,13 +173,32 @@ export default {
           "prix_ht" : this.prix_ht,
           "echelonnement" : this.echelonnement
         })
-        .then((res) => {
+        .then(({id}) => {
+          this.$buefy.notification.open({
+            message: 'Votre devis a bien été crée !',
+            type: 'is-success',
+            duration: 3000,
+            closable: false,
+            autoclose: true
+          });
+
           this.$nuxt.$loading.finish()
-          // TODO redirect to newly created devis
+          // Redirect to newly created devis
+          this.$router.push(`/consulter-devis/${id}`);
+
         })
         .catch((err) => {
           {
-            this.isNotificationOpen = true;
+            //this.isNotificationOpen = true;
+
+            this.$buefy.notification.open({
+              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoclose: true
+            });
+            
             console.error(err);
             this.$nuxt.$loading.finish()
           }
