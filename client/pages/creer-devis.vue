@@ -70,7 +70,8 @@
           <b-input
             placeholder="Prix HT"
             v-on:input="validationFields.prix_ht.status = ''"
-            v-model="prix_ht"
+            v-model.number="prix_ht"
+            type = "number"
             maxlength="20">
           </b-input>
         </b-field>
@@ -198,7 +199,7 @@ export default {
               closable: false,
               autoclose: true
             });
-            
+
             console.error(err);
             this.$nuxt.$loading.finish()
           }
