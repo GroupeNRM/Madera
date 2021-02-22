@@ -56,7 +56,7 @@
         </b-field>
 
         <!-- Input Text : E-mail -->
-        <b-field label="Prénom" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
+        <b-field label="E-mail" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
           <b-input
             type="email"
             v-model="inputMail"
@@ -176,35 +176,49 @@ export default {
 
           this.$nuxt.$loading.start();
 
-          /* Requête POST : Ajout compte utilisateur Madera */
-          await this.$axios.$post('http://localhost:3000/user/', {
-            "firstName": this.inputFirstName,
-            "lastName": this.inputLastName,
-            "password": this.inputRepeatPassword,
-            "age": 20, // L'âge ne sert à rien dans le contexte de l'application, je fixe une valeur par défaut
-            "email": this.inputMail,
-            "role": "ROLE_BASIC"
+          /* TODO : Requete GET vérifier si email utilisateur deja existant */
+          await this.$axios.$post('http://localhost:3000/user/register', {
+            "email": this.inputMail
           })
-            .then((res) => {
-              console.log("POST Request : New Madera acccount => " + res)
+          .then((res) => {
+            console.log("SUCCES : " + res.data)
+            this.statusBar = "is-success";
+            this.errorMessage = "Allez check log";
+            this.isNotificationOpen = true;
+          })
+          .catch((err) => {
+            console.log("ERREUR : " + err)
+          })
 
-              /* TODO : Requete GET vérifier si email utilisateur deja existant */
-
-              this.$nuxt.$loading.finish()
-              console.log("POST Request : New Madera acccount => " + res)
-              this.statusBar = "is-success";
-              this.errorMessage = "Votre compte a bien été crée";
-              this.isNotificationOpen = true;
-            })
-            .catch((err) => {
-              if(err.response?.status === 401) {
-                this.errorMessage = err.response.data.message;
-              } else {
-                this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
-              }
-              this.isNotificationOpen = true;
-              this.$nuxt.$loading.finish();
-            })
+          // /* Requête POST : Ajout compte utilisateur Madera */
+          // await this.$axios.$post('http://localhost:3000/user/', {
+          //   "firstName": this.inputFirstName,
+          //   "lastName": this.inputLastName,
+          //   "password": this.inputRepeatPassword,
+          //   "age": 20, // L'âge ne sert à rien dans le contexte de l'application, je fixe une valeur par défaut
+          //   "email": this.inputMail,
+          //   "role": "ROLE_BASIC"
+          // })
+          //   .then((res) => {
+          //     console.log("POST Request : New Madera acccount => " + res)
+          //
+          //
+          //
+          //     this.$nuxt.$loading.finish()
+          //     console.log("POST Request : New Madera acccount => " + res)
+          //     this.statusBar = "is-success";
+          //     this.errorMessage = "Votre compte a bien été crée";
+          //     this.isNotificationOpen = true;
+          //   })
+          //   .catch((err) => {
+          //     if(err.response?.status === 401) {
+          //       this.errorMessage = err.response.data.message;
+          //     } else {
+          //       this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+          //     }
+          //     this.isNotificationOpen = true;
+          //     this.$nuxt.$loading.finish();
+          //   })
         } else {
           this.validationFields.password.status = "is-danger"
           this.validationFields.password.message = "Les mots de passe saisient ne sont pas identiques"

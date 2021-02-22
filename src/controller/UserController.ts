@@ -38,9 +38,8 @@ export class UserController {
      * Try to save a new user, return an error response if the email is already taken
      * @param request
      * @param response
-     * @param next
      */
-    static async register(request: Request, response: Response, next: NextFunction) {
+    static async register(request: Request, response: Response) {
         const userRepository = getRepository(User);
 
         const { firstName, lastName, password, email, age, role } = request.body;
@@ -99,11 +98,30 @@ export class UserController {
      * Delete Madera user account
      * @param request
      * @param response
-     * @param next
      */
-    static async remove(request: Request, response: Response, next: NextFunction) {
+    static async remove(request: Request, response: Response) {
         const userRepository = getRepository(User);
         let userToRemove = await userRepository.findOne(request.params.id);
         await userRepository.remove(userToRemove);
+    }
+
+    /**
+     *
+     * @param request
+     * @param response
+     */
+    static async isAccountCreated(request: Request, response: Response){
+        const userRepository = getRepository(User);
+        const { email } = request.body;
+
+        const account = await userRepository.findOne({
+            email
+        });
+
+        if(!account){
+            return response.status(401).send({message: "Aucun utilisateur avec cette adresse e-mail"});
+        }
+
+        response.send(account);
     }
 }
