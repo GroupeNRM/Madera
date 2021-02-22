@@ -12,14 +12,15 @@ export class DevisController {
     static async createDevis(request: Request, response: Response) {
         const devisRepository = getRepository(Devis);
 
-        const { libelle, etat, total_ht, remise,createdAt, echelonnement  } = request.body;
+        const { projet, libelle, etat, total_ht, dateCreation, echelonnement  } = request.body;
 
         const devis = new Devis();
+
+        devis.projet = projet;
         devis.libelle = libelle;
         devis.etat = etat;
         devis.total_ht = total_ht;
-        devis.remise = remise;
-        devis.createdAt = createdAt;
+        devis.dateCreation = dateCreation;
         devis.echelonnement = echelonnement;
 
         try {
@@ -37,7 +38,7 @@ export class DevisController {
 
         try {
             devis = await devisRepository.findOneOrFail(request.params.id, {
-                select: ["id", "etat", "libelle", "total_ht", "dateCreation", "echelonnement", "isActive"]
+                select: ["id", "projet", "etat", "libelle", "total_ht", "dateCreation", "echelonnement", "isActive"]
             });
         } catch (e) {
             return response.status(404).send({ message: "Devis not found" })

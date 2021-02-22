@@ -8,6 +8,9 @@ export class Devis {
     @PrimaryGeneratedColumn()
     id: number
 
+    @Column({ type: "varchar", length: 20 })
+    projet: string
+
     @Column({type: "varchar", length:45 })
     libelle: string
 
