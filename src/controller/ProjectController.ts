@@ -54,4 +54,11 @@ export class ProjectController {
 
         return response.send(project);
     }
+
+    static findAll = async (request: Request, response: Response) => {
+        const projectRepository = getRepository(Project);
+        const projects = await projectRepository.findAndCount();
+
+        response.send(projects);
+    }
 }
