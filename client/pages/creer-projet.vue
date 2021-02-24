@@ -122,7 +122,7 @@ export default {
             type: 'is-success',
             duration: 3000,
             closable: false,
-            autoclose: true
+            autoClose: true
           });
           this.$nuxt.$loading.finish()
           this.$router.push(`/consulter-projet/${id}`);
@@ -134,7 +134,7 @@ export default {
               type: 'is-danger',
               duration: 3000,
               closable: false,
-              autoclose: true
+              autoClose: true
             });
             console.log(err);
             this.$nuxt.$loading.finish()

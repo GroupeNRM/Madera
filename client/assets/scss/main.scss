@@ -45,6 +45,11 @@ body {
   .notification {
     top: 100px;
   }
+
+  .is-text-ellipsis {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
 }
 
 // Import bulma styles
