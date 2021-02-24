@@ -183,7 +183,7 @@ export default {
             if(response && response.email){
               this.isAccountAlreadyCreated = true;
               this.statusBar = "is-danger";
-              this.errorMessage = "Compte existant";
+              this.errorMessage = "Compte existant !";
               this.isNotificationOpen = true;
             }
           })
@@ -204,10 +204,11 @@ export default {
               "role": "ROLE_BASIC"
             })
               .then((response) => {
+                // Finish loader
                 this.$nuxt.$loading.finish()
-                this.statusBar = "is-success";
-                this.errorMessage = "Votre compte a bien été crée";
-                this.isNotificationOpen = true;
+
+                // Redirect to login page
+                this.$router.push(`/connexion`);
               })
               .catch((err) => {
                 if(err.response?.status === 401) {
@@ -216,6 +217,8 @@ export default {
                   this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
                 }
                 this.isNotificationOpen = true;
+
+                // Finish loader
                 this.$nuxt.$loading.finish();
               })
           }
