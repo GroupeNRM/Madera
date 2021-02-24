@@ -12,6 +12,8 @@ router.post('/', UserController.register);
 
 router.post('/login', UserController.login);
 
+router.post('/checkRegister', UserController.checkRegister);
+
 router.post('/register', UserController.isAccountCreated);
 
 export default router;

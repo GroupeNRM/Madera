@@ -95,6 +95,26 @@ export class UserController {
     }
 
     /**
+     * Check if given data is already created in database.
+     * @param request
+     * @param response
+     */
+    static async checkRegister(request: Request, response: Response) {
+        const userRepository = getRepository(User);
+        const {email} = request.body;
+
+        const user = await userRepository.findOne({
+            email
+        })
+
+        if(!user) {
+            return response.status(401).send({message: "Aucun utilisateur avec cette adresse e-mail"});
+        }
+
+        response.send(user);
+    }
+
+    /**
      * Delete Madera user account
      * @param request
      * @param response
