@@ -10,7 +10,7 @@ services:
   db:
     image: "mysql:5.7.33"
     ports:
-      - "3306:3306"
+      - "3307:3307"
     environment:
       MYSQL_ROOT_PASSWORD: "admin"
       MYSQL_USER: "test"
