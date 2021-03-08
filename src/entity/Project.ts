@@ -1,11 +1,12 @@
-import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Client} from "./Client";
 
 @Entity()
 export class Project {
     @PrimaryGeneratedColumn()
     id: number
 
-    @Column()
+    @ManyToOne(() => Client, client => client.projects)
     client: string
 
     @Column()
