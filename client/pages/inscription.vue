@@ -1,20 +1,5 @@
 <template>
   <div class="columns is-vcentered">
-    <div class="is-fixed-top">
-      <!-- Alerte Notification -->
-      <b-notification
-        :type="statusBar"
-        aria-close-label="Close notification"
-        role="alert"
-        v-model="isNotificationOpen"
-        position="is-top-right"
-        :duration="3000"
-        :auto-close="true"
-        :closable="false">
-        {{errorMessage}}
-      </b-notification>
-    </div>
-
     <!-- IMG Madera -->
     <div class="column is-6">
       <img
@@ -175,59 +160,39 @@ export default {
         if(this.inputPassword === this.inputRepeatPassword){
           this.$nuxt.$loading.start();
 
-          // Requête POST : Vérifier compte utilisateur existant ?
-          await this.$axios.$post('http://localhost:3000/user/checkRegister', {
+          await this.$axios.$post('http://localhost:3000/user/', {
+            "firstName": this.inputFirstName,
+            "lastName": this.inputLastName,
+            "password": this.inputPassword,
             "email": this.inputMail
           })
-          .then((response) => {
-            if(response && response.email){
-              this.isAccountAlreadyCreated = true;
-              this.statusBar = "is-danger";
-              this.errorMessage = "Compte existant !";
-              this.isNotificationOpen = true;
-            }
+          .then(response => {
+            // Finish loader
+            this.$nuxt.$loading.finish();
+
+            // Redirect to login page
+            this.$router.push('/connexion');
           })
-          .catch((err) => {
-            this.statusBar = "is-danger";
-            this.errorMessage = "Erreur ! Réessayer plus tard";
-            this.isNotificationOpen = true;
+          .catch(error => {
+            // Afficher erreur dans la console
+            console.log("ERREUR INSCRIPTION : " + error);
+
+            this.$buefy.notification.open({
+              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoClose: true
+            });
           })
-
-          if(!this.isAccountAlreadyCreated){
-            // Requête POST : Ajout compte utilisateur
-            await this.$axios.$post('http://localhost:3000/user/', {
-              "firstName": this.inputFirstName,
-              "lastName": this.inputLastName,
-              "password": this.inputRepeatPassword,
-              "age": 20, // L'âge ne sert à rien dans le contexte de l'application, je fixe une valeur par défaut
-              "email": this.inputMail,
-              "role": "ROLE_BASIC"
-            })
-              .then((response) => {
-                // Finish loader
-                this.$nuxt.$loading.finish()
-
-                // Redirect to login page
-                this.$router.push(`/connexion`);
-              })
-              .catch((err) => {
-                if(err.response?.status === 401) {
-                  this.errorMessage = err.response.data.message;
-                } else {
-                  this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
-                }
-                this.isNotificationOpen = true;
-
-                // Finish loader
-                this.$nuxt.$loading.finish();
-              })
-          }
         } else {
-          this.validationFields.password.status = "is-danger"
-          this.validationFields.password.message = "Les mots de passe saisient ne sont pas identiques"
-
-          this.validationFields.repeatPassword.status = "is-danger"
-          this.validationFields.repeatPassword.message = "Les mots de passe saisient ne sont pas identiques"
+          this.$buefy.notification.open({
+            message: 'Les mots de passe saisis ne sont pas identiques.',
+            type: 'is-danger',
+            duration: 3000,
+            closable: false,
+            autoClose: true
+          });
         }
       }
     }

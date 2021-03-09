@@ -42,7 +42,7 @@ export class UserController {
     static async register(request: Request, response: Response) {
         const userRepository = getRepository(User);
 
-        const { firstName, lastName, password, email, age, role } = request.body;
+        const { firstName, lastName, password, email, role } = request.body;
 
         const hashedPassword = await argon2.hash(password);
 
@@ -50,7 +50,6 @@ export class UserController {
         user.firstName = firstName;
         user.lastName = lastName;
         user.password = hashedPassword;
-        user.age = age;
         user.email = email;
         user.role = role;
 
@@ -95,26 +94,6 @@ export class UserController {
     }
 
     /**
-     * Check if given data is already created in database.
-     * @param request
-     * @param response
-     */
-    static async checkRegister(request: Request, response: Response) {
-        const userRepository = getRepository(User);
-        const {email} = request.body;
-
-        const user = await userRepository.findOne({
-            email
-        })
-
-        if(!user) {
-            return response.status(401).send({message: "Aucun utilisateur avec cette adresse e-mail"});
-        }
-
-        response.send(user);
-    }
-
-    /**
      * Delete Madera user account
      * @param request
      * @param response
@@ -123,25 +102,5 @@ export class UserController {
         const userRepository = getRepository(User);
         let userToRemove = await userRepository.findOne(request.params.id);
         await userRepository.remove(userToRemove);
-    }
-
-    /**
-     *
-     * @param request
-     * @param response
-     */
-    static async isAccountCreated(request: Request, response: Response){
-        const userRepository = getRepository(User);
-        const { email } = request.body;
-
-        const account = await userRepository.findOne({
-            email
-        });
-
-        if(!account){
-            return response.status(401).send({message: "Aucun utilisateur avec cette adresse e-mail"});
-        }
-
-        response.send(account);
     }
 }
