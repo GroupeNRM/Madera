@@ -38,12 +38,11 @@ export class UserController {
      * Try to save a new user, return an error response if the email is already taken
      * @param request
      * @param response
-     * @param next
      */
-    static async register(request: Request, response: Response, next: NextFunction) {
+    static async register(request: Request, response: Response) {
         const userRepository = getRepository(User);
 
-        const { firstName, lastName, password, email, age, role } = request.body;
+        const { firstName, lastName, password, email, role } = request.body;
 
         const hashedPassword = await argon2.hash(password);
 
@@ -51,7 +50,6 @@ export class UserController {
         user.firstName = firstName;
         user.lastName = lastName;
         user.password = hashedPassword;
-        user.age = age;
         user.email = email;
         user.role = role;
 
@@ -95,8 +93,12 @@ export class UserController {
         response.send(user);
     }
 
-    //@TODO
-    static async remove(request: Request, response: Response, next: NextFunction) {
+    /**
+     * Delete Madera user account
+     * @param request
+     * @param response
+     */
+    static async remove(request: Request, response: Response) {
         const userRepository = getRepository(User);
         let userToRemove = await userRepository.findOne(request.params.id);
         await userRepository.remove(userToRemove);
