@@ -2,13 +2,9 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import argon2 from "argon2";
-import {generateAccessToken} from "../utils/auth";
-
-declare module 'express-session' {
-    interface SessionData {
-        userId: number;
-    }
-}
+import {generateAccessToken} from "../middleware/auth";
+import {IGetUserAuthInfoRequest} from "../types";
+import {sendMail} from "../services/MailService";
 
 export class UserController {
     static async all(request: Request, response: Response, next: NextFunction) {
@@ -62,9 +58,9 @@ export class UserController {
             }
         }
 
-        request.session!.userId = user.id;
-
         response.send(user);
+
+        await sendMail(user.email, 'Bienvenue sur Madera !');
     }
 
     /**
@@ -101,5 +97,26 @@ export class UserController {
         const userRepository = getRepository(User);
         let userToRemove = await userRepository.findOne(request.params.id);
         await userRepository.remove(userToRemove);
+    }
+
+    /**
+     * Get information about the current logged user
+     * @param request
+     * @param response
+     */
+    static async me(request: IGetUserAuthInfoRequest, response: Response) {
+        const userRepository = getRepository(User);
+        let user: User;
+        let id = request.user.id;
+
+        try {
+            user = await userRepository.findOneOrFail(id, {
+                select: ["id", "firstName", "lastName", "role"]
+            });
+        } catch (error) {
+            return response.status(404).send({message: "User not found"});
+        }
+
+        response.send(user);
     }
 }

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import {UserController} from "../controller/UserController";
-import {checkJwt} from "../utils/auth";
+import {checkJwt} from "../middleware/auth";
 
 const router = Router();
 
@@ -12,5 +12,7 @@ router.get('/:id([0-9]+)', checkJwt, UserController.getOneById);
 router.post('/', UserController.register);
 
 router.post('/login', UserController.login);
+
+router.get('/me', checkJwt, UserController.me);
 
 export default router;

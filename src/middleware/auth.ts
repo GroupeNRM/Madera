@@ -24,11 +24,7 @@ export function checkJwt(request: IGetUserAuthInfoRequest, res: Response, next: 
             }
 
             request.user = decoded;
-            if(decoded.role === UserRole.ADMIN) {
-                next();
-            } else {
-                res.sendStatus(403);
-            }
+            next();
         }));
     } else {
         res.sendStatus(401);
