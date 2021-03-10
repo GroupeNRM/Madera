@@ -85,11 +85,7 @@
 
         <!-- Link : Log In -->
         <div class="has-text-centered mt-3">
-          <a
-            href="/connexion"
-            class="is-link">
-            Vous avez un compte ? Connectez-vous
-          </a>
+          <NuxtLink to="/connexion">Vous avez un compte ? Connectez-vous</NuxtLink>
         </div>
       </section>
     </div>
@@ -117,10 +113,6 @@ export default {
       inputMail: null,
       inputPassword: null,
       inputRepeatPassword: null,
-      statusBar: null,
-
-      isNotificationOpen: false,
-      isAccountAlreadyCreated: false,
 
       validationFields: {
         firstname:{
@@ -144,8 +136,6 @@ export default {
           message: "Merci de saisir à nouveau votre mot de passe"
         }
       },
-
-      errorMessage: "Une erreur est survenue, veuillez réessayer plus tard."
     }
   },
   methods: {
@@ -166,16 +156,21 @@ export default {
             "password": this.inputPassword,
             "email": this.inputMail
           })
-          .then(response => {
-            // Finish loader
+          .then(() => {
             this.$nuxt.$loading.finish();
 
-            // Redirect to login page
+            this.$buefy.notification.open({
+              message: 'Votre compte a bien été crée !',
+              type: 'is-success',
+              duration: 3000,
+              closable: false,
+              autoClose: true
+            });
+
             this.$router.push('/connexion');
           })
           .catch(error => {
-            // Afficher erreur dans la console
-            console.log("ERREUR INSCRIPTION : " + error);
+            console.log(error);
 
             this.$buefy.notification.open({
               message: 'Une erreur est survenue, veuillez réessayer plus tard.',
