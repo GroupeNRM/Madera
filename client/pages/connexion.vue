@@ -1,20 +1,5 @@
 <template>
   <div class="columns is-vcentered">
-    <div class="is-fixed-top">
-      <!-- Alerte Notification -->
-      <b-notification
-        type="is-danger"
-        aria-close-label="Close notification"
-        role="alert"
-        v-model="isNotificationOpen"
-        position="is-top-right"
-        :duration="3000"
-        :auto-close="true"
-        :closable="false">
-        {{errorMessage}}
-      </b-notification>
-    </div>
-
     <!-- IMG Madera -->
     <div class="column is-6">
       <img
@@ -103,8 +88,6 @@ export default {
       inputMail: null,
       inputPassword: null,
 
-      isNotificationOpen: false,
-
       validationFields: {
         email: {
           status: "",
@@ -132,8 +115,8 @@ export default {
           "password": this.inputPassword
         })
         .then((res) => {
+          localStorage.setItem('token', res);
           this.$nuxt.$loading.finish()
-          console.log(res)
         })
         .catch((err) => {
           if(err.response?.status === 401) {
@@ -141,7 +124,15 @@ export default {
           } else {
             this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
           }
-          this.isNotificationOpen = true
+
+          this.$buefy.notification.open({
+            message: this.errorMessage,
+            type: 'is-danger',
+            duration: 3000,
+            closable: false,
+            autoClose: true
+          });
+
           this.$nuxt.$loading.finish()
         })
       }

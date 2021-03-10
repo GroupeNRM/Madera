@@ -2,6 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import argon2 from "argon2";
+import {generateAccessToken} from "../utils/auth";
 
 declare module 'express-session' {
     interface SessionData {
@@ -88,9 +89,7 @@ export class UserController {
             return response.status(401).send({message: "Le mot de passe ne correspond pas"})
         }
 
-        request.session!.userId = user.id;
-
-        response.send(user);
+        response.json(generateAccessToken(user));
     }
 
     /**
