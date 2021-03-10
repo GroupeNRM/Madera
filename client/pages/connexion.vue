@@ -73,11 +73,11 @@
 
         <!-- Link : Register -->
         <div class="has-text-centered mt-3">
-          <a
-            href="/inscription"
+          <NuxtLink
+            to="/inscription"
             class="is-link">
             Pas de compte ? Inscrivez-vous
-          </a>
+          </NuxtLink>
         </div>
       </section>
     </div>
