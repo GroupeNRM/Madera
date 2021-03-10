@@ -1,18 +1,5 @@
 <template>
   <div>
-    <div class="is-fixed-top">
-      <b-notification
-        type="is-danger"
-        aria-close-label="Close notification"
-        role="alert"
-        v-model="isNotificationOpen"
-        position="is-top-right"
-        :duration="3000"
-        :auto-close="true">
-        Une erreur est survenue, veuillez réessayer plus tard.
-      </b-notification>
-    </div>
-
     <MainTitle>
       <span slot="first-line">Créer un</span>
       <span slot="second-line">nouveau devis</span>
@@ -131,15 +118,14 @@ export default {
   },
   data() {
     return {
-      locale: "fr-FR",
-      projet: undefined,
+    
+      projet:undefined ,
       client: undefined,
-      total_ttc: undefined,
-      total_ht: "",
-      remise:"",
+      total_ttc: 0,
+      total_ht: 0,
+      remise: 0,
       selectedDate: new Date(),
       echelonnement: undefined,
-
       
 
       isNotificationOpen: false,
@@ -180,8 +166,9 @@ export default {
       !this.total_ttc ? this.validationFields.total_ttc.status = "is-danger" : this.validationFields.total_ttc.status = "is-success";
       !this.total_ht ? this.validationFields.total_ht.status = "is-danger" : this.validationFields.total_ht.status = "is-success";
       !this.remise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
+      !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
       !this.echelonnement ? this.validationFields.echelonnement.status = "is-danger" : this.validationFields.echelonnement.status = "is-success";
-      !this.selectedDate ? this.validationFields.selectedDate.status = "is-danger" : this.validationFields.selectedDate.status = "is-success";
+      
 
       if(!(this.validationFields.projet.status === "is-danger" || 
           this.validationFields.client.status === "is-danger" || 
@@ -192,6 +179,7 @@ export default {
           this.validationFields.echelonnement.status === "is-danger")) {
 
         this.$nuxt.$loading.start()
+
         await this.$axios.$post('http://localhost:3000/devis', {
           "projet": this.projet,
           "client": this.client,

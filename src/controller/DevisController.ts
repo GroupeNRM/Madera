@@ -11,21 +11,23 @@ export class DevisController {
      */
     static async createDevis(request: Request, response: Response) {
         const devisRepository = getRepository(Devis);
+        
 
-        const { reference, total_ht, total_ttc, createdAt, remise, echelonnement, updatedAt, projet, client  } = request.body;
+        const { total_ht, total_ttc, createdAt, remise, echelonnement, projet, client } = request.body;
 
         const devis = new Devis();
 
-        devis.reference = reference;
+        //devis.reference = reference;
         devis.total_ht = total_ht;
         devis.total_ttc = total_ttc;
         devis.total_ht = total_ht;
         devis.createdAt = createdAt;
         devis.remise = remise;
         devis.echelonnement = echelonnement;
-        devis.updatedAt = updatedAt;
+        //devis.updatedAt = updatedAt;
         devis.projet = projet;
         devis.client = client;
+
 
         try {
             await devisRepository.save(devis);
@@ -43,14 +45,11 @@ export class DevisController {
         try {
             devis = await devisRepository.findOneOrFail(request.params.id, {
                 select: [
-                    "id", 
-                    "reference", 
                     "total_ht", 
                     "total_ttc", 
                     "createdAt", 
                     "remise", 
-                    "echelonnement", 
-                    "updatedAt", 
+                    "echelonnement", , 
                     "projet", 
                     "client", 
                     "isActive"
@@ -78,5 +77,11 @@ export class DevisController {
         }
 
         return response.send(devis);
+    }
+
+    static findAll = async (request: Request, response: Response) => {
+        
+
+        return response.send();
     }
 }
