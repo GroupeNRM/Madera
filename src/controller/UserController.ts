@@ -10,6 +10,7 @@ declare module 'express-session' {
 }
 
 export class UserController {
+    
     static async all(request: Request, response: Response, next: NextFunction) {
         const userRepository = getRepository(User);
         const users = await userRepository.find({

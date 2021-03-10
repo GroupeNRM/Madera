@@ -1,4 +1,5 @@
 import {Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import { IsNotEmpty } from "class-validator";
 
 
 export enum Echelonnement {
@@ -10,6 +11,19 @@ export enum Echelonnement {
     Etape_6 = "75%",
     Etape_7 = "95%",
     Etape_8 = "100%",
+}
+
+export enum Projet {
+    Projet_1 = "Projet Grenoble",
+    Projet_2 = "Projet Lyon",
+    Projet_3 = "Projet Annecy",
+    Projet_4 = "Projet Alpes d'Huez",
+}
+
+export enum Client {
+    Client_1 = "M. John",
+    Client_2 = "Mme. Jane",
+    Client_3 = "M. Toto",
 }
 
 @Entity({name: "devis"})
@@ -37,6 +51,8 @@ export class Devis {
         enum: Echelonnement,
         default: Echelonnement.Etape_1
     })
+    @IsNotEmpty()
+    echelonnement: Echelonnement;
 
     @CreateDateColumn()
     createdAt: Date
@@ -44,8 +60,26 @@ export class Devis {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @Column({ type: "varchar", length: 20 })
-    projet: string
+    @Column({
+        type: "enum",
+        enum: Projet,
+        default: ""
+    })
+    @IsNotEmpty()
+    projet: Projet;
+
+    @Column({
+        type: "enum",
+        enum: Client,
+        default: ""
+    })
+    @IsNotEmpty()
+    client: Client;
+
+    @Column({
+        default: true
+    })
+    isActive: boolean
 
 
 }
