@@ -8,7 +8,7 @@
         </MainTitle>
 
         <div class="columns is-multiline">
-          <Card v-for="devis in devisData" :key="devis.client" :data="devis"></Card>
+          <CardDevis v-for="devis in devisData" :key="devis.id" :data="devis"></CardDevis>
           
         </div>
       </div>

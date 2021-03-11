@@ -121,6 +121,116 @@
         <b-button type="is-info" v-on:click="sendData" outlined>Créer le devis</b-button>
       </div>
     </form>
+
+    <div class="pt-6">
+        <h1 class="has-text-weight-bold">Plus d'informations</h1>
+    </div>
+
+    <div class="columns">
+      
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">A la signature</span>
+          </InfoCard>
+        </div>
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">3%</span>
+          </InfoCard>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">Obtention du permis</span>
+          </InfoCard>
+        </div>
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">10%</span>
+          </InfoCard>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">Ouverture du chantier</span>
+          </InfoCard>
+        </div>
+      <div class="column">
+        <InfoCard>
+              <span slot="text-data">15%</span>
+          </InfoCard>
+      </div>
+    </div>
+
+    <div class="columns">
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">Achèvement des fondations</span>
+            </InfoCard>
+          </div>
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">25%</span>
+            </InfoCard>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">Achèvement des murs</span>
+            </InfoCard>
+          </div>
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">40%</span>
+            </InfoCard>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">Mise hors d'eau/hors d'air</span>
+            </InfoCard>
+          </div>
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">75%</span>
+            </InfoCard>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">Achèvement des travaux d'équipement (plomberie, menuiserie, chauffage)</span>
+            </InfoCard>
+          </div>
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">95%</span>
+            </InfoCard>
+        </div>
+      </div>
+
+      <div class="columns">
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">Remise des clés</span>
+            </InfoCard>
+          </div>
+        <div class="column">
+          <InfoCard>
+                <span slot="text-data">100%</span>
+            </InfoCard>
+        </div>
+      </div>
+
   </div>
 </template>
 

@@ -25,7 +25,7 @@
           </div>
           <div class="column is-0-tablet-only">
             <figure class="is-inline-block">
-              <img src="~assets/img/devis-madera.png" alt="Plan de la maison modulaire" class="image">
+              <img src="~assets/img/devis-madera.png" width="280" alt="Devis projet maison modulaire" class="image">
             </figure>
           </div>
         </div>
