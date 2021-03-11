@@ -18,23 +18,23 @@
           >
         </div>
 
-        <!-- Input Text : Firstname -->
-        <b-field label="Nom" :type="validationFields.firstname.status" :message="validationFields.firstname.status === 'is-danger' ? validationFields.firstname.message : ''">
+        <!-- Input Text : Lastname -->
+        <b-field label="Nom" :type="validationFields.lastname.status" :message="validationFields.lastname.status === 'is-danger' ? validationFields.lastname.message : ''">
           <b-input
             type="text"
-            v-model="inputFirstName"
-            v-on:input="validationFields.firstname.status = ''"
+            v-model="inputLastName"
+            v-on:input="validationFields.lastname.status = ''"
             placeholder="DOE"
             icon="account">
           </b-input>
         </b-field>
 
-        <!-- Input Text : Lastname -->
-        <b-field label="Prénom" :type="validationFields.lastname.status" :message="validationFields.lastname.status === 'is-danger' ? validationFields.lastname.message : ''">
+        <!-- Input Text : Firstname -->
+        <b-field label="Prénom" :type="validationFields.firstname.status" :message="validationFields.firstname.status === 'is-danger' ? validationFields.firstname.message : ''">
           <b-input
             type="text"
-            v-model="inputLastName"
-            v-on:input="validationFields.lastname.status = ''"
+            v-model="inputFirstName"
+            v-on:input="validationFields.firstname.status = ''"
             placeholder="John"
             icon="account">
           </b-input>
