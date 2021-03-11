@@ -8,8 +8,7 @@
           <div class="column">
             <NuxtLink to="/consulter-devis" class="backmenu-link is-size-2 has-text-weight-bold"><b-icon class="pr-5" icon="arrow-left" size="is-small"></b-icon>Revenir aux devis</NuxtLink>
             <MainTitle>
-              <span slot="first-line">Consulter le</span>
-              <span slot="second-line">devis n°{{this.$route.params.id}}</span>
+              <span slot="second-line">Devis n°{{this.$route.params.id}}</span>
             </MainTitle>
 
             <ul class="info-devis mb-3">
@@ -20,7 +19,8 @@
 
             <div>
               <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
-              <b-button class="pl-6 pr-6" type="is-danger" @click="confirmArchive" :disabled="!devisData.isActive">Archiver</b-button>
+              <b-button class="pl-6 pr-6 mr-5" type="is-danger" @click="confirmArchive" :disabled="!devisData.isActive">Archiver</b-button>
+               <b-button class="pl-6 pr-6" type="is-success">Imprimer</b-button>
             </div>
           </div>
           <div class="column is-0-tablet-only">

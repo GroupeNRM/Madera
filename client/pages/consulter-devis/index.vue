@@ -1,5 +1,20 @@
 <template>
   <div>
+    <section>
+        <p class="content"><b>Rechercher un devis</b> {{ selected }}</p>
+        <b-field>
+            <b-autocomplete
+                rounded
+                v-model="name"
+                :data="filteredDataArray"
+                placeholder="Tapez la référence du devis..."
+                icon="magnify"
+                clearable
+                @select="option => selected = option">
+                <template #empty>No results found</template>
+            </b-autocomplete>
+        </b-field>
+    </section>
     <div>
       <div class="main-content mb-6">
         <MainTitle>
@@ -33,8 +48,21 @@ export default {
   data() {
     return {
       devisData: [],
-      devisCount: undefined
-    }
+      devisCount: undefined,
+      data: [],
+      computed: {
+        filteredDataArray() {
+            return this.data.filter((option) => {
+                return option
+                    .toString()
+                    .toLowerCase()
+                    .indexOf(this.name.toLowerCase()) >= 0
+            })
+          }
+        },
+        name: '',
+        selected: null
+      }
   },
   async fetch() {
     let devisList = await this.$axios.$get(`http://localhost:3000/devis`);
