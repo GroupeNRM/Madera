@@ -1,38 +1,28 @@
-import {Request, Response} from "express";
-import {getRepository} from "typeorm";
-import {Devis} from "../entity/Devis";
+import { Request, Response } from "express";
+import { getRepository } from "typeorm";
+import { Devis } from "../entity/Devis";
 
 export class DevisController {
-
-    /**
-     * 
-     * @param request 
-     * @param response 
-     */
     static async createDevis(request: Request, response: Response) {
         const devisRepository = getRepository(Devis);
-        
 
-        const { total_ht, total_ttc, createdAt, remise, echelonnement, projet, client } = request.body;
+        const { reference, total_ht, total_ttc, remise, echelonnement, createdAt, projet, client   } = request.body;
 
         const devis = new Devis();
 
-        //devis.reference = reference;
+        devis.reference = reference;
         devis.total_ht = total_ht;
         devis.total_ttc = total_ttc;
-        devis.total_ht = total_ht;
-        devis.createdAt = createdAt;
         devis.remise = remise;
         devis.echelonnement = echelonnement;
-        //devis.updatedAt = updatedAt;
+        devis.createdAt = createdAt;
         devis.projet = projet;
         devis.client = client;
 
-
         try {
             await devisRepository.save(devis);
-        } catch(err) {
-            return response.status(400).json({message: "Une erreur est survenue", err})
+        } catch (err) {
+            return response.status(400).json({ message: "Une erreur est survenue", err })
         }
 
         response.send(devis);
@@ -44,16 +34,7 @@ export class DevisController {
 
         try {
             devis = await devisRepository.findOneOrFail(request.params.id, {
-                select: [
-                    "total_ht", 
-                    "total_ttc", 
-                    "createdAt", 
-                    "remise", 
-                    "echelonnement", , 
-                    "projet", 
-                    "client", 
-                    "isActive"
-                ]
+                select: ["id", "reference", "total_ht", "total_ttc", "remise", "echelonnement", "createdAt", "projet", "client", "isActive"]
             });
         } catch (e) {
             return response.status(404).send({ message: "Devis not found" })
@@ -73,15 +54,16 @@ export class DevisController {
 
             await devisRepository.save(devis);
         } catch (e) {
-            return response.status(404).send({ message: "Devis not found" });
+            return response.status(404).send({ message: " Devis not found" });
         }
 
         return response.send(devis);
     }
 
     static findAll = async (request: Request, response: Response) => {
-        
+        const devisRepository = getRepository(Devis);
+        const devis = await devisRepository.findAndCount();
 
-        return response.send();
+        response.send(devis);
     }
 }

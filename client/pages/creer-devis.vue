@@ -1,3 +1,5 @@
+<!--There are some Vue warn about type check error in the logs, it's just a dev bug : https://github.com/buefy/nuxt-buefy/issues/36 -->
+
 <template>
   <div>
     <MainTitle>
@@ -6,8 +8,84 @@
     </MainTitle>
 
     <form action="" class="form-container">
-
       <div class="columns is-multiline">
+        <b-field label="Reference" class="column is-half" :type="validationFields.reference.status" :message="validationFields.reference.status === 'is-danger' ? validationFields.reference.message : ''">
+          <b-select
+            placeholder="Reference d'un projet"
+            v-model="reference"
+            v-on:input="validationFields.reference.status = ''"
+            expanded>
+            <option>PM-GR</option>
+            <option>PM-AN</option>
+            <option>PM-LY</option>
+            <option>PM-AI</option>
+            <option>PM-PA</option>
+          </b-select>
+        </b-field>
+        <b-field label="Prix Total HT" class="column is-half" :type="validationFields.total_ht.status" :message="validationFields.total_ht.status === 'is-danger' ? validationFields.total_ht.message : ''">
+          <b-select
+            placeholder="Saisir le prix HT"
+            v-model="total_ht"
+            v-on:input="validationFields.total_ht.status = ''"
+            expanded>
+            <option>10000</option>
+            <option>15000</option>
+            <option>20000</option>
+            <option>25000</option>
+            <option>30000</option>
+          </b-select>
+        </b-field>
+        <b-field label="Prix Total TTC" class="column is-half" :type="validationFields.total_ttc.status" :message="validationFields.total_ttc.status === 'is-danger' ? validationFields.total_ttc.message : ''">
+          <b-select
+            placeholder="Saisir le prix TTC"
+            v-model="total_ttc"
+            v-on:input="validationFields.total_ttc.status = ''"
+            expanded>
+            <option>10500</option>
+            <option>15500</option>
+            <option>20500</option>
+            <option>25500</option>
+            <option>30500</option>
+          </b-select>
+        </b-field>
+        <b-field label="Remise" class="column is-half" :type="validationFields.remise.status" :message="validationFields.remise.status === 'is-danger' ? validationFields.remise.message : ''">
+          <b-select
+            placeholder="Selectionner une remise"
+            v-model="remise"
+            v-on:input="validationFields.remise.status = ''"
+            expanded>
+            <option>Remise 20% sur le prix Hors Taxe</option>
+            <option>Remise fidélité 5% sur chaque matériau</option>
+          </b-select>
+        </b-field>
+
+        <b-field label="Echelonnement" class="column is-half" :type="validationFields.echelonnement.status" :message="validationFields.echelonnement.status === 'is-danger' ? validationFields.echelonnement.message : ''">
+          <b-select
+            placeholder="Selectionner un client"
+            v-model="echelonnement"
+            v-on:input="validationFields.echelonnement.status = ''"
+            expanded>
+            <option>3%</option>
+            <option>10%</option>
+            <option>15%</option>
+            <option>25%</option>
+            <option>40%</option>
+            <option>75%</option>
+            <option>95%</option>
+            <option>100%</option>
+          </b-select>
+        </b-field>
+
+         <b-field label="Date de création" class="column is-half" :type="validationFields.date.status" :message="validationFields.date.status === 'is-danger' ? validationFields.date.message : ''">
+          <b-datepicker
+            v-model="selectedDate"
+            :locale="locale"
+            v-on:input="validationFields.client.status = ''"
+            placeholder="26-12-2020"
+            icon="calendar-today"
+            trap-focus>
+          </b-datepicker>
+        </b-field>
 
         <b-field label="Projet" class="column is-half" :type="validationFields.projet.status" :message="validationFields.projet.status === 'is-danger' ? validationFields.projet.message : ''">
           <b-select
@@ -15,9 +93,11 @@
             v-model="projet"
             v-on:input="validationFields.projet.status = ''"
             expanded>
-            <option>Projet 1</option>
-            <option>Projet 2</option>
-            <option>Projet 3</option>
+            <option>Grenoble</option>
+            <option>Annecy</option>
+            <option>Lyon</option>
+            <option>Aix-le-Bain</option>
+            <option>Paris</option>
           </b-select>
         </b-field>
 
@@ -27,79 +107,21 @@
             v-model="client"
             v-on:input="validationFields.client.status = ''"
             expanded>
-            <option>client 1</option>
-            <option>client 2</option>
-            <option>client 3</option>
+            <option>Mairie de Grenoble</option>
+            <option>Ville de Lyon</option>
+            <option>Annecy Vision</option>
+            <option>M. John</option>
+            <option>Mme. Jane</option>
           </b-select>
         </b-field>
-
-        <b-field label="Total Prix Hors Taxe" class="column is-half" :type="validationFields.total_ttc.status" :message="validationFields.total_ttc.status === 'is-danger' ? validationFields.total_ttc.message : ''">
-          <b-input
-            placeholder="Prix TTC"
-            v-on:input="validationFields.total_ttc.status = ''"
-            v-model.number="total_ttc"
-            type = "number"
-            maxlength="20">
-          </b-input>
-        </b-field>
-
-        <b-field label="Total Prix TTC" class="column is-half" :type="validationFields.total_ht.status" :message="validationFields.total_ht.status === 'is-danger' ? validationFields.total_ht.message : ''">
-          <b-input
-            placeholder="Prix TTC"
-            v-on:input="validationFields.total_ht.status = ''"
-            v-model.number="total_ht"
-            type = "number"
-            maxlength="20">
-          </b-input>
-        </b-field>
-
-        <b-field label="Remise" class="column is-half" :type="validationFields.remise.status" :message="validationFields.remise.status === 'is-danger' ? validationFields.remise.message : ''">
-          <b-select
-            placeholder="Selectionner une remise"
-            v-model="remise"
-            v-on:input="validationFields.remise.status = ''"
-            expanded>
-            <option>Remise de 20% sur le prix HT</option>
-            <option>Remise de 5% sur chaque matériaux</option>
-           
-          </b-select>
-        </b-field>
-
-        <b-field label="Date de création" class="column is-half" :type="validationFields.date.status" :message="validationFields.date.status === 'is-danger' ? validationFields.date.message : ''">
-          <b-datepicker
-            v-model="selectedDate"
-            :locale="locale"
-            v-on:input="validationFields.projet.status = ''"
-            placeholder="26-12-2020"
-            icon="calendar-today"
-            trap-focus>
-          </b-datepicker>
-        </b-field>
-
-        
-
-        <b-field label="Echelonnement" class="column is-half" :type="validationFields.echelonnement.status" :message="validationFields.echelonnement.status === 'is-danger' ? validationFields.echelonnement.message : ''">
-          <b-select
-            placeholder="Selectionner l'echelonnement du projet"
-            v-model="echelonnement"
-            v-on:input="validationFields.echelonnement.status = ''"
-            expanded>
-            <option>0%</option>
-            <option>25%</option>
-            <option>50%</option>
-            <option>75%</option>
-            <option>100%</option>
-          </b-select>
-        </b-field>
+       
       </div>
 
-    </form>
       <div class="column is-full has-text-centered">
         <b-button type="is-info" v-on:click="sendData" outlined>Créer le devis</b-button>
       </div>
-
+    </form>
   </div>
-
 </template>
 
 <script>
@@ -111,110 +133,116 @@ export default {
       meta: [
         {
           hid: "description",
-          content: "Page permettant de créer le devis d'un projet"
+          content: "Page permettant de créer un nouveau devis de maisons modulaires"
         }
       ]
     }
   },
   data() {
     return {
-    
-      projet:undefined ,
-      client: undefined,
-      total_ttc: 0,
+      reference: "",
       total_ht: 0,
-      remise: 0,
+      total_ttc: 0,
+      remise: "",
+      locale: "fr-FR",
+      echelonnement: "",
       selectedDate: new Date(),
-      echelonnement: undefined,
-      
-
-      isNotificationOpen: false,
+      client: undefined,
+      projet: undefined,
 
       validationFields: {
-        projet: {
+        reference: {
           status: "",
-          message: "Merci de choisir un projet"
-        },
-        client: {
-          status: "",
-          message: "Merci de choisir un client"
-        },
-        total_ttc: {
-          status: "",
-          message: "Merci de saisir un prix TTC"
+          message: "Merci de saisir une reference"
         },
         total_ht: {
           status: "",
-          message: "Merci de sasir le prix HT"
+          message: "Merci de saisir un prix"
+        },
+        total_ttc: {
+          status: "",
+          message: "Merci de saisir un prix"
+        },
+        remise: {
+          status: "",
+          message: "Merci de selectionner une remise"
+        },
+        echelonnement: {
+          status: "",
+          message: "Merci de choisir un echelonnement"
         },
         date: {
           status: "",
           message: "Merci de choisir une date de création"
         },
-         echelonnement: {
+        client: {
           status: "",
-          message: "Merci de selectionner l'echelonnement"
-        }
+          message: "Merci de choisir un client"
+        },
+        projet: {
+          status: "",
+          message: "Merci de choisir un projet"
+        },
+        
       },
     }
   },
   methods: {
     sendData: async function() {
+    
 
+      !this.reference ? this.validationFields.reference.status = "is-danger" : this.validationFields.reference.status = "is-success";
+      !this.total_ht ? this.validationFields.total_ht.status = "is-danger" : this.validationFields.total_ht.status = "is-success";
+      !this.total_ttc ? this.validationFields.total_ttc.status = "is-danger" : this.validationFields.total_ttc.status = "is-success";
+      !this.remise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
+      !this.echelonnement ? this.validationFields.echelonnement.status = "is-danger" : this.validationFields.echelonnement.status = "is-success";
+      !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
       !this.projet ? this.validationFields.projet.status = "is-danger" : this.validationFields.projet.status = "is-success";
       !this.client ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
-      !this.total_ttc ? this.validationFields.total_ttc.status = "is-danger" : this.validationFields.total_ttc.status = "is-success";
-      !this.total_ht ? this.validationFields.total_ht.status = "is-danger" : this.validationFields.total_ht.status = "is-success";
-      !this.remise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
-      !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
-      !this.echelonnement ? this.validationFields.echelonnement.status = "is-danger" : this.validationFields.echelonnement.status = "is-success";
-      
 
-      if(!(this.validationFields.projet.status === "is-danger" || 
-          this.validationFields.client.status === "is-danger" || 
-          this.validationFields.total_ttc.status === "is-danger" || 
-          this.validationFields.total_ht.status === "is-danger" || 
-          this.validationFields.remise.status === "is-danger" || 
-          this.validationFields.date.status === "is-danger" || 
-          this.validationFields.echelonnement.status === "is-danger")) {
-
+      if(!(
+        this.validationFields.reference.status === "is-danger" || 
+        this.validationFields.total_ht.status === "is-danger" || 
+        this.validationFields.total_ttc.status === "is-danger" || 
+        this.validationFields.remise.status === "is-danger" || 
+        this.validationFields.echelonnement.status === "is-danger" || 
+        this.validationFields.date.status === "is-danger" || 
+        this.validationFields.projet.status === "is-danger" || 
+        this.validationFields.client.status === "is-danger")) {
+        
         this.$nuxt.$loading.start()
-
+        
         await this.$axios.$post('http://localhost:3000/devis', {
-          "projet": this.projet,
-          "client": this.client,
-          "total_ttc" : this.total_ttc,
-          "total_ht" : this.total_ht,
+          "reference": this.reference,
+          "total_ht": this.total_ht,
+          "total_ttc": this.total_ttc,
           "remise": this.remise,
+          "echelonnement": this.echelonnement,
           "createdAt": this.selectedDate,
-          "echelonnement" : this.echelonnement
+          "projet": this.projet,
+          "client": this.client
         })
         .then(({id}) => {
           this.$buefy.notification.open({
-            message: 'Votre devis a bien été crée !',
+            message: 'Le devis a bien été crée !',
             type: 'is-success',
             duration: 3000,
             closable: false,
-            autoclose: true
+            autoClose: true
           });
-
           this.$nuxt.$loading.finish()
-      
           this.$router.push(`/consulter-devis/${id}`);
-
         })
         .catch((err) => {
           {
-
             this.$buefy.notification.open({
               message: 'Une erreur est survenue, veuillez réessayer plus tard.',
               type: 'is-danger',
               duration: 3000,
               closable: false,
-              autoclose: true
+              autoClose: true
             });
-
-            console.error(err);
+            console.log(err);
             this.$nuxt.$loading.finish()
           }
         });

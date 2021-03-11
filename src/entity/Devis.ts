@@ -1,5 +1,4 @@
-import {Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
-
+import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 @Entity()
 
 export class Devis {
@@ -10,17 +9,17 @@ export class Devis {
     reference: string
 
     @Column()
-    total_ht: number
+    total_ht: string
 
     @Column()
-    total_ttc: number
+    total_ttc: string
 
     @Column()
-    remise: number
+    remise: string
 
     @Column()
     echelonnement: string
-  
+
     @CreateDateColumn()
     createdAt: Date
 

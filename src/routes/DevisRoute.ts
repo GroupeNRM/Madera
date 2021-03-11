@@ -11,6 +11,4 @@ router.put('/:id([0-9]+)', DevisController.archiveDevis);
 
 router.get('/', DevisController.findAll);
 
-//router.get('/:id([0-9]+)', DevisController.findOneById)
-
 export default router;

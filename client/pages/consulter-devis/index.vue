@@ -4,12 +4,12 @@
       <div class="main-content mb-6">
         <MainTitle>
           <span slot="first-line">Consulter tous</span>
-          <span slot="second-line">les projets</span>
+          <span slot="second-line">les devis</span>
         </MainTitle>
 
         <div class="columns is-multiline">
-          <Card v-for="project in projects" :key="project.id" :data="project"></Card>
-   
+          <Card v-for="devis in devisData" :key="devis.client" :data="devis"></Card>
+          
         </div>
       </div>
     </div>
@@ -21,25 +21,25 @@ export default {
   name: "index",
   head() {
     return {
-      title: "Consulter les projets",
+      title: "Consulter les devis",
       meta: [
         {
           hid: "description",
-          content: "Page permettant de consulter les projets"
+          content: "Page permettant de consulter les devis"
         }
       ]
     }
   },
   data() {
     return {
-      projects: [],
-      projectCount: undefined
+      devisData: [],
+      devisCount: undefined
     }
   },
   async fetch() {
-    let projectsList = await this.$axios.$get(`http://localhost:3000/project`);
-    this.projects = projectsList[0];
-    this.projectCount = projectsList[1];
+    let devisList = await this.$axios.$get(`http://localhost:3000/devis`);
+    this.devisData = devisList[0];
+    this.devisCount = devisList[1];
   }
 }
 </script>
