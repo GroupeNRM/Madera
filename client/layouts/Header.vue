@@ -57,7 +57,7 @@
             <b-icon icon="settings"></b-icon>
             Paramètres
           </b-dropdown-item>
-          <b-dropdown-item value="logout" aria-role="menuitem">
+          <b-dropdown-item value="logout" aria-role="menuitem" @click="logout">
             <b-icon icon="logout"></b-icon>
             Déconnexion
           </b-dropdown-item>
@@ -74,6 +74,11 @@ export default {
   name: "Header",
   computed: {
     ...mapGetters(['isAuthenticated', 'loggedInUser'])
+  },
+  methods: {
+    async logout() {
+      await this.$auth.logout();
+    }
   }
 }
 </script>
