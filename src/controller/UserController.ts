@@ -2,6 +2,7 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import argon2 from "argon2";
+const crypto = require('crypto');
 import {generateAccessToken} from "../middleware/auth";
 import {IGetUserAuthInfoRequest} from "../types";
 import {sendMail} from "../services/MailService";
@@ -49,6 +50,7 @@ export class UserController {
         user.password = hashedPassword;
         user.email = email;
         user.role = role;
+        user.randomHash = crypto.randomBytes(30).toString('hex');
 
         try {
             await userRepository.save(user);
@@ -60,7 +62,7 @@ export class UserController {
 
         response.send(user);
 
-        await sendMail(user.email, 'Bienvenue sur Madera !');
+        await sendMail(user, 'Bienvenue sur Madera !');
     }
 
     /**
@@ -83,6 +85,10 @@ export class UserController {
         const passwordValid = await argon2.verify(user.password, password);
         if(!passwordValid) {
             return response.status(401).send({message: "Le mot de passe ne correspond pas"})
+        }
+
+        if(!user.isActive) {
+            return response.status(401).send({message: "Veuillez valider votre compte en cliquant sur le lien envoyé par mail"})
         }
 
         response.json(generateAccessToken(user));
@@ -118,5 +124,42 @@ export class UserController {
         }
 
         response.send(user);
+    }
+
+    static async validate(request: Request, response: Response) {
+        const userRepository = getRepository(User);
+        const encodedUrl = request.query.qid.toString();
+
+        if(!encodedUrl) {
+            return;
+        }
+
+        try {
+            let decodedUrl = Buffer.from(encodedUrl, 'base64').toString('ascii');
+            let [uuid, hash] = decodedUrl.split('&');
+
+            try {
+                let user: User = await userRepository.findOneOrFail(uuid);
+
+                if(user.randomHash === hash) {
+                    user.isActive = true;
+
+                    try {
+                        await userRepository.save(user);
+
+                        return response.status(200).send({message: "Le compte a été validé avec succès !"});
+                    } catch(e) {
+                        console.log(e);
+                        return response.status(400).send({message: "Erreur lors de la validation du compte"});
+                    }
+                } else {
+                    return response.status(400).send({message: "Erreur lors de la validation du compte"});
+                }
+            } catch(error) {
+                return response.status(404).send({message: "User not found"});
+            }
+        } catch (e) {
+            return response.status(400).send({message: "Erreur dans le lien de validation"});
+        }
     }
 }

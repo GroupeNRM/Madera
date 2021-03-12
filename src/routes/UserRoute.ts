@@ -15,4 +15,6 @@ router.post('/login', UserController.login);
 
 router.get('/me', checkJwt, UserController.me);
 
+router.put('/validate', UserController.validate);
+
 export default router;
