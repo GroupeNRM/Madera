@@ -65,11 +65,11 @@
           </div>
         </b-field>
 
-        <b-field label="Nombre de maison" class="column is-half">
+        <b-field label="Nombre de maison" class="column is-half" :type="validationFields.nbrMaison.status" :message="validationFields.nbrMaison.status === 'is-danger' ? validationFields.nbrMaison.message : ''">
           <b-numberinput v-model="inputNbrMaison" min="1" max="10" :placeholder="0"></b-numberinput>
         </b-field>
 
-        <b-field label="Remise" class="column is-half">
+        <b-field label="Remise" :type="validationFields.remise.status" class="column is-half">
           <b-select
             placeholder="Selectionner une remise"
             v-model="inputRemise"
@@ -140,15 +140,22 @@ export default {
         },
         client: {
           status: "",
-          message: "Merci de sélectrionner votre client"
+          message: "Merci de sélectionner votre client"
         },
         reference: {
           status: "",
           message: "Merci de saisir une reference"
         },
+        nbrMaison: {
+          status: "",
+          message: "Merci de saisir un nombre de maison supérieur à 0"
+        },
+        remise: {
+          status: ""
+        },
         prixTTC: {
           status: "",
-          message: "Erreur du calcul du prix total TTC"
+          message: "Merci de calculer le prix total TTC"
         }
       }
     }
@@ -211,10 +218,17 @@ export default {
       }
     },
     sendData: async function() {
+      !this.inputDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
       !this.inputProjet ? this.validationFields.projet.status = "is-danger" : this.validationFields.projet.status = "is-success";
       !this.inputClient ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
       !this.inputReference ? this.validationFields.reference.status = "is-danger" : this.validationFields.reference.status = "is-success";
+      this.inputNbrMaison === 0 ? this.validationFields.nbrMaison.status = "is-danger" : this.validationFields.nbrMaison.status = "is-success";
+      !this.inputRemise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
       this.inputTotalTTC === 0 ? this.validationFields.prixTTC.status = "is-danger" : this.validationFields.prixTTC.status = "is-success";
+
+      if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
+        alert("FORM OK");
+      }
 
       // if(!(
       //   this.validationFields.reference.status === "is-danger" ||
