@@ -226,57 +226,44 @@ export default {
       !this.inputRemise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
       this.inputTotalTTC === 0 ? this.validationFields.prixTTC.status = "is-danger" : this.validationFields.prixTTC.status = "is-success";
 
-      if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
-        alert("FORM OK");
-      }
+      if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.nbrMaison.status === "is-danger" || this.validationFields.remise.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
+        this.$nuxt.$loading.start();
 
-      // if(!(
-      //   this.validationFields.reference.status === "is-danger" ||
-      //   this.validationFields.total_ht.status === "is-danger" ||
-      //   this.validationFields.total_ttc.status === "is-danger" ||
-      //   this.validationFields.remise.status === "is-danger" ||
-      //   this.validationFields.echelonnement.status === "is-danger" ||
-      //   this.validationFields.date.status === "is-danger" ||
-      //   this.validationFields.projet.status === "is-danger" ||
-      //   this.validationFields.client.status === "is-danger")) {
-      //
-      //   this.$nuxt.$loading.start()
-      //
-      //   await this.$axios.$post('http://localhost:3000/devis', {
-      //     "reference": this.reference,
-      //     "total_ht": this.total_ht,
-      //     "total_ttc": this.total_ttc,
-      //     "remise": this.remise,
-      //     "echelonnement": this.echelonnement,
-      //     "createdAt": this.selectedDate,
-      //     "projet": this.projet,
-      //     "client": this.client
-      //   })
-      //   .then(({id}) => {
-      //     this.$buefy.notification.open({
-      //       message: 'Le devis a bien été crée !',
-      //       type: 'is-success',
-      //       duration: 3000,
-      //       closable: false,
-      //       autoClose: true
-      //     });
-      //     this.$nuxt.$loading.finish()
-      //     this.$router.push(`/consulter-devis/${id}`);
-      //   })
-      //   .catch((err) => {
-      //     {
-      //       this.$buefy.notification.open({
-      //         message: 'Une erreur est survenue, veuillez réessayer plus tard.',
-      //         type: 'is-danger',
-      //         duration: 3000,
-      //         closable: false,
-      //         autoClose: true
-      //       });
-      //       console.log(err);
-      //       this.$nuxt.$loading.finish()
-      //     }
-      //   });
-      // }
+        // Requête POST
+        await this.$axios.$post('http://localhost:3000/devis', {
+          "createdAt": this.inputDate,
+          "projet": this.inputProjet,
+          "client": this.inputClient,
+          "reference": this.inputReference,
+          "remise": this.inputRemise,
+          "echelonnement": "0%",
+          "total_ht": (this.inputTotalTTC - this.inputTotalTTC) * 0.13,
+          "total_ttc": this.inputTotalTTC
+        })
+        .then(({id}) => {
+          this.$buefy.notification.open({
+            message: 'Le devis a bien été crée !',
+            type: 'is-success',
+            duration: 3000,
+            closable: false,
+            autoClose: true
+          });
+
+          this.$nuxt.$loading.finish();
+          this.$router.push(`/consulter-devis/${id}`);
+        }).catch((err) => {
+            this.$buefy.notification.open({
+              message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoClose: true
+            });
+
+            console.log(err);
+            this.$nuxt.$loading.finish();
+        });
+      }
     }
   }
 }
