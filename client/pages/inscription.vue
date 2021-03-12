@@ -95,6 +95,7 @@
 <script>
 export default {
   name: "inscription-page",
+  layout: 'no-header',
   head(){
     return {
       title: "Inscription - Madera",

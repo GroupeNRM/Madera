@@ -1,20 +1,5 @@
 <template>
   <div class="columns is-vcentered">
-    <div class="is-fixed-top">
-      <!-- Alerte Notification -->
-      <b-notification
-        type="is-danger"
-        aria-close-label="Close notification"
-        role="alert"
-        v-model="isNotificationOpen"
-        position="is-top-right"
-        :duration="3000"
-        :auto-close="true"
-        :closable="false">
-        {{errorMessage}}
-      </b-notification>
-    </div>
-
     <!-- IMG Madera -->
     <div class="column is-6">
       <img
@@ -33,43 +18,45 @@
           >
         </div>
 
-        <!-- Input Text : E-Mail -->
-        <b-field label="E-mail" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
-          <b-input
-            type="email"
-            v-model="inputMail"
-            v-on:input="validationFields.email.status = ''"
-            placeholder="johnDoe@domain.fr"
-            icon="email">
-          </b-input>
-        </b-field>
+        <form v-on:submit.prevent>
+          <!-- Input Text : E-Mail -->
+          <b-field label="E-mail" :type="validationFields.email.status" :message="validationFields.email.status === 'is-danger' ? validationFields.email.message : ''">
+            <b-input
+              type="email"
+              v-model="inputMail"
+              v-on:input="validationFields.email.status = ''"
+              placeholder="johnDoe@domain.fr"
+              icon="email">
+            </b-input>
+          </b-field>
 
-        <!-- Input Text : Password -->
-        <b-field label="Mot de passe" :type="validationFields.password.status" :message="validationFields.password.status === 'is-danger' ? validationFields.password.message : ''">
-          <b-input
-            type="password"
-            v-model="inputPassword"
-            v-on:input="validationFields.password.status = ''"
-            placeholder="************"
-            icon="shield-key-outline"
-            password-reveal>
-          </b-input>
-        </b-field>
+          <!-- Input Text : Password -->
+          <b-field label="Mot de passe" :type="validationFields.password.status" :message="validationFields.password.status === 'is-danger' ? validationFields.password.message : ''">
+            <b-input
+              type="password"
+              v-model="inputPassword"
+              v-on:input="validationFields.password.status = ''"
+              placeholder="************"
+              icon="shield-key-outline"
+              password-reveal>
+            </b-input>
+          </b-field>
 
-        <!-- Checkbox : Save account -->
-        <b-field>
-          <b-checkbox>Se souvenir de moi</b-checkbox>
-        </b-field>
+          <!-- Checkbox : Save account -->
+          <b-field>
+            <b-checkbox>Se souvenir de moi</b-checkbox>
+          </b-field>
 
-        <!-- Button : Log In -->
-        <div class="has-text-centered">
-          <b-button
-            type="is-info"
-            v-on:click="checkLogin"
-            expanded>
-            Connexion
-          </b-button>
-        </div>
+          <!-- Button : Log In -->
+          <div class="has-text-centered">
+            <b-button
+              type="is-info"
+              v-on:click="userLogin"
+              expanded>
+              Connexion
+            </b-button>
+          </div>
+        </form>
 
         <!-- Link : Register -->
         <div class="has-text-centered mt-3">
@@ -87,6 +74,7 @@
 <script>
 export default {
   name: "connexion-page",
+  layout: 'no-header',
   head(){
     return {
       title: "Connexion - Madera",
@@ -103,8 +91,6 @@ export default {
       inputMail: null,
       inputPassword: null,
 
-      isNotificationOpen: false,
-
       validationFields: {
         email: {
           status: "",
@@ -120,30 +106,38 @@ export default {
     }
   },
   methods: {
-    checkLogin: async function(){
+    userLogin: async function() {
       !this.inputMail ? this.validationFields.email.status = "is-danger" : this.validationFields.email.status = "is-success";
       !this.inputPassword ? this.validationFields.password.status = "is-danger" : this.validationFields.password.status = "is-success";
 
-      if(!(this.validationFields.email.status === "is-danger" || this.validationFields.password.status === "is-danger")){
+      if(!(this.validationFields.email.status === "is-danger" || this.validationFields.password.status === "is-danger")) {
         this.$nuxt.$loading.start()
 
-        await this.$axios.$post('http://localhost:3000/user/login', {
-          "email": this.inputMail,
-          "password": this.inputPassword
-        })
-        .then((res) => {
+        try {
+          await this.$auth.loginWith('local', {
+            data: {
+              "email": this.inputMail,
+              "password": this.inputPassword
+            }
+          });
           this.$nuxt.$loading.finish()
-          console.log(res)
-        })
-        .catch((err) => {
-          if(err.response?.status === 401) {
-            this.errorMessage = err.response.data.message;
-          } else {
-            this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
-          }
-          this.isNotificationOpen = true
-          this.$nuxt.$loading.finish()
-        })
+        } catch(err) {
+            if(err.response?.status === 401) {
+              this.errorMessage = err.response.data.message;
+            } else {
+              this.errorMessage = "Une erreur est survenue, veuillez réessayer plus tard.";
+            }
+
+            this.$buefy.notification.open({
+              message: this.errorMessage,
+              type: 'is-danger',
+              duration: 3000,
+              closable: false,
+              autoClose: true
+            });
+
+            this.$nuxt.$loading.finish()
+        }
       }
     }
   }
