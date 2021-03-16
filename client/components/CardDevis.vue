@@ -17,7 +17,7 @@
       </div>
       <footer class="card-footer">
         <div class="card-footer-item is-justify-content-start px-5">
-          <p style="font-weight:bold" class="has-text-grey-light">Date de création : {{ (new Date(data.createdAt).getDate())  }} - {{ (new Date(data.createdAt).getMonth() + 1)  }} - {{ (new Date(data.createdAt).getFullYear())  }}</p>
+          <p style="font-weight:bold" class="has-text-grey-light">Date de création : {{ (new Date(data.createdAt).getDate())  }}/{{ (new Date(data.createdAt).getUTCMonth() + 1)  }}/{{ (new Date(data.createdAt).getFullYear())  }}</p>
         </div>
       </footer>
     </div>
