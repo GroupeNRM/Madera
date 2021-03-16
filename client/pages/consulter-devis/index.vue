@@ -1,19 +1,21 @@
 <template>
   <div>
     <section>
-        <p class="content"><b>Rechercher un devis</b> {{ selected }}</p>
-        <b-field>
-            <b-autocomplete
-                rounded
-                v-model="name"
-                :data="filteredDataArray"
-                placeholder="Tapez la référence du devis..."
-                icon="magnify"
-                clearable
-                @select="option => selected = option">
-                <template #empty>No results found</template>
-            </b-autocomplete>
-        </b-field>
+      <!--
+      <p class="content"><b>Rechercher un devis</b> {{ selected }}</p>
+      <b-field>
+          <b-autocomplete
+              rounded
+              v-model="name"
+              :data="filteredDataArray"
+              placeholder="Tapez la référence du devis..."
+              icon="magnify"
+              clearable
+              @select="option => selected = option">
+              <template #empty>No results found</template>
+          </b-autocomplete>
+      </b-field>
+      -->
     </section>
     <div>
       <div class="main-content mb-6">
@@ -24,7 +26,7 @@
 
         <div class="columns is-multiline">
           <CardDevis v-for="devis in devisData" :key="devis.id" :data="devis"></CardDevis>
-          
+
         </div>
       </div>
     </div>
@@ -51,7 +53,7 @@ export default {
       devisCount: undefined,
       data: [],
       computed: {
-        filteredDataArray() {
+        /*filteredDataArray() {
             return this.data.filter((option) => {
                 return option
                     .toString()
@@ -59,7 +61,7 @@ export default {
                     .indexOf(this.name.toLowerCase()) >= 0
             })
           }
-        },
+        */},
         name: '',
         selected: null
       }

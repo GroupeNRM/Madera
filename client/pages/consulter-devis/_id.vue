@@ -7,6 +7,7 @@
         <div class="columns is-multiline">
           <div class="column">
             <NuxtLink to="/consulter-devis" class="backmenu-link is-size-2 has-text-weight-bold"><b-icon class="pr-5" icon="arrow-left" size="is-small"></b-icon>Revenir aux devis</NuxtLink>
+
             <MainTitle>
               <span slot="second-line">Devis n°{{this.$route.params.id}}</span>
             </MainTitle>
@@ -17,11 +18,7 @@
               <li>Projet : <span class="has-text-primary">{{ devisData.projet }}</span></li>
             </ul>
 
-            <div>
-              <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
-              <b-button class="pl-6 pr-6 mr-5" type="is-danger" @click="confirmArchive" :disabled="!devisData.isActive">Archiver</b-button>
-               <b-button class="pl-6 pr-6" type="is-success">Imprimer</b-button>
-            </div>
+            <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
           </div>
           <div class="column is-0-tablet-only">
             <figure class="is-inline-block">
@@ -31,43 +28,23 @@
         </div>
       </div>
 
-      <div class="pt-6">
-        <h3 class="has-text-weight-bold">Plus d'informations</h3>
-        <div class="columns">
-          <div class="column">
-            <InfoCard icon="calendar-outline">
-              <span slot="text-data">{{ (new Date(devisData.createdAt).getDate())  }} - {{ new Date(devisData.createdAt).getMonth() + 1 }} - {{ new Date(devisData.createdAt).getFullYear() }} </span>
-            </InfoCard>
-          </div>
-          <div class="column">
-            <InfoCard icon="account-outline">
-              <span slot="text-data">{{devisData.client}}</span>
-            </InfoCard>
-          </div>
-          <div class="column">
-            <InfoCard icon="map-marker-outline">
-              <span slot="text-data">{{devisData.projet}}</span>
-            </InfoCard>
-          </div>
+      <h3 class="pt-6 has-text-weight-bold">Plus d'informations</h3>
+
+      <div class="columns pt-2">
+        <div class="column">
+          <InfoCard icon="finance">
+            <span slot="text-data"><b>Remise client</b> : {{devisData.remise}}</span>
+          </InfoCard>
         </div>
-      </div>
-      <div class="pt-6">
-        <div class="columns">
-          <div class="column">
-            <InfoCard>
-              <span slot="text-data">{{devisData.remise}}</span>
-            </InfoCard>
-          </div>
-          <div class="column">
-            <InfoCard>
-              <span slot="text-data">{{devisData.echelonnement}} de la somme à débloquer</span>
-            </InfoCard>
-          </div>
-          <div class="column">
-            <InfoCard>
-              <span style="color: #00cc00; font-weight: bold" slot="text-data">{{devisData.total_ttc}} €</span>
-            </InfoCard>
-          </div>
+        <div class="column">
+          <InfoCard icon="magnify">
+            <span slot="text-data"><b>Echelonnement</b> : {{devisData.echelonnement}}</span>
+          </InfoCard>
+        </div>
+        <div class="column">
+          <InfoCard icon="currency-eur">
+            <span slot="text-data"><b>Prix TTC</b> : <span id="textePrixTTC">{{devisData.total_ttc}} €</span></span>
+          </InfoCard>
         </div>
       </div>
     </div>
@@ -82,64 +59,29 @@ export default {
       meta: [
         {
           hid: "description",
-          content: "Page permettant de visualiser les données d'un devis"
+          content: "Page permettant de visualiser les données d'un devis."
         }
       ]
     }
   },
   data() {
     return {
-      devisData: [],
-      isNotificationOpen: false,
-      notificationType: "is-danger",
-      notificationMessage: "Une erreur est survenue, veuillez réessayer plus tard."
+      devisData: []
     }
   },
   async fetch() {
     this.devisData = await this.$axios.$get(`http://localhost:3000/devis/${this.$route.params.id}`);
     console.log(this.devisData)
-  },
-  methods: {
-    confirmArchive() {
-      this.$buefy.dialog.confirm({
-        title: 'Archivage du devis',
-        message: 'Êtes vous certain de vouloir archiver le devis ? Aucune modification ne sera possible.',
-        confirmText: 'Confirmer',
-        cancelText: 'Annuler',
-        type: 'is-danger',
-        hasIcon: true,
-        onConfirm: async () => {
-          this.$nuxt.$loading.start();
-          await this.$axios.put(`http://localhost:3000/devis/${this.$route.params.id}`)
-            .then(() => {
-              this.devisData.isActive = false;
-              this.$buefy.notification.open({
-                message: 'Le devis a bien été archivé !',
-                type: 'is-success',
-                duration: 3000,
-                closable: false,
-                autoClose: true
-              })
-              this.$nuxt.$loading.finish();
-            })
-            .catch(() => {
-              this.$buefy.notification.open({
-                message: 'Une erreur est survenue, veuillez réessayer plus tard.',
-                type: 'is-danger',
-                duration: 3000,
-                closable: false,
-                autoClose: true
-              })
-              this.$nuxt.$loading.finish();
-            })
-        }
-      })
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+  #textePrixTTC{
+    color: #00CC00;
+    font-weight: bold;
+  }
+
   .info-devis {
     font-family: "Poppins", serif;
     font-weight: bold;
