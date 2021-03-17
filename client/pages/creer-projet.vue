@@ -56,7 +56,6 @@
     </form>
   </div>
 </template>
-
 <script>
 export default {
   name: "creer-projet",
@@ -109,8 +108,13 @@ export default {
       !this.libelle ? this.validationFields.libelle.status = "is-danger" : this.validationFields.libelle.status = "is-success";
       !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
 
-      if(!(this.validationFields.client.status === "is-danger" || this.validationFields.devis.status === "is-danger" || this.validationFields.libelle.status === "is-danger" || this.validationFields.date.status === "is-danger")) {
+      if(!(this.validationFields.client.status === "is-danger" || 
+      this.validationFields.devis.status === "is-danger" || 
+      this.validationFields.libelle.status === "is-danger" || 
+      this.validationFields.date.status === "is-danger")) {
+        
         this.$nuxt.$loading.start()
+        
         await this.$axios.$post('http://localhost:3000/project', {
           "client": this.client,
           "devis": this.devis,

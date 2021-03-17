@@ -14,11 +14,10 @@
 
       <template #end>
         <NuxtLink to="/creer-projet" class="navbar-item">Créer un projet</NuxtLink>
-
-        <b-navbar-item href="#">
-          Créer un devis
-        </b-navbar-item>
+        <NuxtLink to="/creer-devis" class="navbar-item">Créer un devis</NuxtLink>
         <NuxtLink to="/consulter-projet" class="navbar-item">Consulter les projets</NuxtLink>
+        <NuxtLink to="/consulter-devis" class="navbar-item">Consulter les devis</NuxtLink>
+
         <b-navbar-item href="#">
           Consulter les devis
         </b-navbar-item>
