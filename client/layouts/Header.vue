@@ -40,9 +40,11 @@
             </a>
           </template>
 
-          <b-dropdown-item value="dashboard" aria-role="menuitem">
-            <b-icon icon="home"></b-icon>
-            Tableau de bord
+          <b-dropdown-item value="dashboard" has-link aria-role="menuitem">
+            <NuxtLink to="/tableau-de-bord">
+              <b-icon icon="home"></b-icon>
+              Tableau de bord
+            </NuxtLink>
           </b-dropdown-item>
           <b-dropdown-item value="products" aria-role="menuitem">
             <b-icon icon="cart"></b-icon>
