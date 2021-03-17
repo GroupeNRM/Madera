@@ -42,8 +42,28 @@ export default {
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
     // https://github.com/Developmint/nuxt-webfontloader
-    'nuxt-webfontloader'
+    'nuxt-webfontloader',
+    // https://auth.nuxtjs.org/guide/setup
+    '@nuxtjs/auth-next'
   ],
+
+  auth: {
+    strategies: {
+      local: {
+        token: {
+          property: 'token',
+          type: 'Bearer'
+        },
+        user: {
+          property: false
+        },
+        endpoints: {
+          login: { url: 'http://localhost:3000/user/login', method: 'post' },
+          user: { url: 'http://localhost:3000/user/me', method: 'get' }
+        }
+      }
+    }
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {},

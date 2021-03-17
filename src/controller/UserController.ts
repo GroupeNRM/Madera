@@ -2,12 +2,10 @@ import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
 import {User} from "../entity/User";
 import argon2 from "argon2";
-
-declare module 'express-session' {
-    interface SessionData {
-        userId: number;
-    }
-}
+const crypto = require('crypto');
+import {generateAccessToken} from "../middleware/auth";
+import {IGetUserAuthInfoRequest} from "../types";
+import {sendMail} from "../services/MailService";
 
 export class UserController {
     
@@ -39,12 +37,11 @@ export class UserController {
      * Try to save a new user, return an error response if the email is already taken
      * @param request
      * @param response
-     * @param next
      */
-    static async register(request: Request, response: Response, next: NextFunction) {
+    static async register(request: Request, response: Response) {
         const userRepository = getRepository(User);
 
-        const { firstName, lastName, password, email, age, role } = request.body;
+        const { firstName, lastName, password, email, role } = request.body;
 
         const hashedPassword = await argon2.hash(password);
 
@@ -54,6 +51,7 @@ export class UserController {
         user.password = hashedPassword;
         user.email = email;
         user.role = role;
+        user.randomHash = crypto.randomBytes(30).toString('hex');
 
         try {
             await userRepository.save(user);
@@ -63,9 +61,9 @@ export class UserController {
             }
         }
 
-        request.session!.userId = user.id;
-
         response.send(user);
+
+        await sendMail(user, 'Bienvenue sur Madera !');
     }
 
     /**
@@ -90,15 +88,79 @@ export class UserController {
             return response.status(401).send({message: "Le mot de passe ne correspond pas"})
         }
 
-        request.session!.userId = user.id;
+        if(!user.isActive) {
+            return response.status(401).send({message: "Veuillez valider votre compte en cliquant sur le lien envoyé par mail"})
+        }
+
+        response.json(generateAccessToken(user));
+    }
+
+    /**
+     * Delete Madera user account
+     * @param request
+     * @param response
+     */
+    static async remove(request: Request, response: Response) {
+        const userRepository = getRepository(User);
+        let userToRemove = await userRepository.findOne(request.params.id);
+        await userRepository.remove(userToRemove);
+    }
+
+    /**
+     * Get information about the current logged user
+     * @param request
+     * @param response
+     */
+    static async me(request: IGetUserAuthInfoRequest, response: Response) {
+        const userRepository = getRepository(User);
+        let user: User;
+        let id = request.user.id;
+
+        try {
+            user = await userRepository.findOneOrFail(id, {
+                select: ["id", "firstName", "lastName", "role"]
+            });
+        } catch (error) {
+            return response.status(404).send({message: "User not found"});
+        }
 
         response.send(user);
     }
 
-    //@TODO
-    static async remove(request: Request, response: Response, next: NextFunction) {
+    static async validate(request: Request, response: Response) {
         const userRepository = getRepository(User);
-        let userToRemove = await userRepository.findOne(request.params.id);
-        await userRepository.remove(userToRemove);
+        const encodedUrl = request.query.qid.toString();
+
+        if(!encodedUrl) {
+            return;
+        }
+
+        try {
+            let decodedUrl = Buffer.from(encodedUrl, 'base64').toString('ascii');
+            let [uuid, hash] = decodedUrl.split('&');
+
+            try {
+                let user: User = await userRepository.findOneOrFail(uuid);
+
+                if(user.randomHash === hash) {
+                    user.isActive = true;
+
+                    try {
+                        await userRepository.save(user);
+
+                        return response.status(200).send({message: "Le compte a été validé avec succès !"});
+                    } catch(e) {
+                        console.log(e);
+                        return response.status(400).send({message: "Erreur lors de la validation du compte"});
+                    }
+                } else {
+                    return response.status(400).send({message: "Erreur lors de la validation du compte"});
+                }
+            } catch(error) {
+                return response.status(404).send({message: "User not found"});
+            }
+        } catch (e) {
+            return response.status(400).send({message: "Erreur dans le lien de validation"});
+        }
     }
 }

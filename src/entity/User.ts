@@ -1,4 +1,4 @@
-import {Entity, PrimaryGeneratedColumn, Column, Unique} from "typeorm";
+import {Entity, PrimaryGeneratedColumn, Column, Unique, CreateDateColumn, UpdateDateColumn} from "typeorm";
 import {IsEmail, IsNotEmpty} from "class-validator";
 
 export enum UserRole {
@@ -32,6 +32,19 @@ export class User {
         enum: UserRole,
         default: UserRole.BASIC
     })
+
     @IsNotEmpty()
     role: UserRole;
+
+    @Column({default: false})
+    isActive: boolean
+
+    @Column()
+    randomHash: string
+
+    @CreateDateColumn()
+    createdAt: Date
+
+    @UpdateDateColumn()
+    updatedAt: Date
 }
