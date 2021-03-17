@@ -5,28 +5,61 @@
       <span slot="second-line">nouveau client</span>
     </MainTitle>
 
-    <form action="" class="form-container">
+    <form class="form-container">
       <div class="columns is-multiline">
-        <b-field label="Prenom" class="column is-half" :type="validationFields.client.status" :message="validationFields.client.status === 'is-danger' ? validationFields.client.message : ''">
+        <b-field label="Prenom" class="column is-half" :type="validationFields.prenom.status" :message="validationFields.prenom.status === 'is-danger' ? validationFields.prenom.message : ''">
           <b-input
             placeholder="Jean.."
-            v-on:input="validationFields.libelle.status = ''"
-            v-model="libelle"
+            v-on:input="validationFields.prenom.status = ''"
+            v-model="formData.prenom"
             maxlength="65">
           </b-input>
         </b-field>
 
-        <b-field label="Nom de famille" class="column is-half" :type="validationFields.devis.status" :message="validationFields.devis.status === 'is-danger' ? validationFields.devis.message : ''">
+        <b-field label="Nom de famille" class="column is-half" :type="validationFields.nom.status" :message="validationFields.nom.status === 'is-danger' ? validationFields.nom.message : ''">
           <b-input
             placeholder="Dupont.."
-            v-on:input="validationFields.libelle.status = ''"
-            v-model="libelle"
+            v-on:input="validationFields.nom.status = ''"
+            v-model="formData.nom"
             maxlength="65">
           </b-input>
         </b-field>
 
-        <b-field label="Adresse" class="column is-6">
+        <b-field label="Mail" class="column is-half" :type="validationFields.mail.status" :message="validationFields.mail.status === 'is-danger' ? validationFields.mail.message : ''">
+          <b-input
+            placeholder="bill.gates@microsoft.com"
+            v-on:input="validationFields.mail.status = ''"
+            v-model="formData.mail"
+            maxlength="65">
+          </b-input>
+        </b-field>
+
+        <b-field label="Téléphone" class="column is-half" :type="validationFields.telephone.status" :message="validationFields.telephone.status === 'is-danger' ? validationFields.telephone.message : ''">
+          <b-input
+            placeholder="06.66.66.66.66"
+            v-on:input="validationFields.telephone.status = ''"
+            v-model="formData.telephone"
+            maxlength="65">
+          </b-input>
+        </b-field>
+
+        <b-field label="Particulier" class="column is-6">
+          <button class="flat-button" @click.prevent="formData.statutPro = 'Particulier'" :class="{ 'is-selected': formData.statutPro === 'Particulier' }">
+            <img src="~assets/img/user.svg" alt="">
+          </button>
+        </b-field>
+
+        <b-field label="Professionnel" class="column is-6">
+          <button class="flat-button" @click.prevent="formData.statutPro = 'Professionnel'" :class="{ 'is-selected': formData.statutPro === 'Professionnel' }">
+            <img src="~assets/img/collectivite.svg" alt="">
+          </button>
+        </b-field>
+
+        <b-field label="Adresse" class="column is-6" :type="validationFields.adress.status" :message="validationFields.adress.status === 'is-danger' ? validationFields.adress.message : ''">
           <b-autocomplete
+            v-on:input="validationFields.adress.status = ''"
+            v-model="formData.adress"
+            :value="formData.adress"
             :data="adresses"
             placeholder="87 Rue de la pièce"
             field="properties.name"
@@ -41,29 +74,23 @@
               </div>
             </template>
             <template #footer>
-              <span v-show="adresses.length === 0" class="has-text-grey">Il n'existe pas de ville portant ce nom</span>
+              <span v-show="adresses.length === 0" class="has-text-grey">Aucune adresse trouvée!</span>
             </template>
           </b-autocomplete>
         </b-field>
 
-        <b-field label="Ville" class="column is-4">
+        <b-field label="Ville" class="column is-4" :type="validationFields.ville.status" :message="validationFields.ville.status === 'is-danger' ? validationFields.ville.message : ''">
           <b-input
+            v-model="formData.ville"
             placeholder="Paris"
-            :value="ville"
+            :value="formData.ville"
             maxlength="65">
           </b-input>
         </b-field>
 
-        <b-field label="Code Postal" class="column is-2" :type="validationFields.date.status" :message="validationFields.date.status === 'is-danger' ? validationFields.date.message : ''">
-          <b-input v-model="codePostal" :value="codePostal" placeholder="93160"></b-input>
+        <b-field label="Code Postal" class="column is-2" :type="validationFields.codePostal.status" :message="validationFields.codePostal.status === 'is-danger' ? validationFields.codePostal.message : ''">
+          <b-input v-model="formData.codePostal" :value="formData.codePostal" placeholder="93160"></b-input>
         </b-field>
-
-        <b-field label="Libellé/Note" class="column is-full" :type="validationFields.date.status" :message="validationFields.date.status === 'is-danger' ? validationFields.date.message : ''">
-          <label>
-            <textarea class="textarea has-fixed-size" placeholder="Notes à propos du client" rows="5"></textarea>
-          </label>
-        </b-field>
-
       </div>
 
       <div class="column is-full has-text-centered">
@@ -93,35 +120,55 @@ export default {
     return {
       selectedDate: new Date(),
       locale: "fr-FR",
-      libelle: "",
-      client: undefined,
-      devis: undefined,
+
+      formData: {
+        prenom: undefined,
+        nom: undefined,
+        mail: undefined,
+        telephone: undefined,
+        statutPro: undefined,
+        adress: undefined,
+        codePostal: undefined,
+        ville: undefined,
+      },
 
       validationFields: {
-        client: {
+        prenom: {
           status: "",
-          message: "Merci de choisir un client"
+          message: "Merci de saisir un prénom"
         },
-        devis: {
+        nom: {
           status: "",
-          message: "Merci de choisir un devis"
+          message: "Merci de choisir un nom"
         },
-        libelle: {
+        mail: {
           status: "",
-          message: "Merci de saisir un libellé"
+          message: "Merci de saisir un mail"
         },
-        date: {
+        telephone: {
           status: "",
-          message: "Merci de choisir une date de création"
+          message: "Merci de saisir un numéro de téléphone"
+        },
+        statutPro: {
+          status: "",
+          message: "Merci de choisir le type de client"
+        },
+        adress: {
+          status: "",
+          message: "Merci de saisir une adresse"
+        },
+        ville: {
+          status: "",
+          message: "Merci de saisir une ville"
+        },
+        codePostal: {
+          status: "",
+          message: "Merci de saisir un code postal"
         }
       },
 
-      adress: '',
       isFetching: false,
-      adressSelected: null,
-      adresses: [],
-      codePostal: undefined,
-      ville: '',
+      adresses: []
     }
   },
   methods: {
@@ -137,7 +184,6 @@ export default {
       this.isFetching = true
       this.$axios.$get(`https://api-adresse.data.gouv.fr/search/?q=${adressInput}&type=housenumber`)
         .then(data => {
-          console.log(data.features)
           data.features.forEach((adress) => this.adresses.push(adress))
         })
         .catch((error) => {
@@ -149,20 +195,41 @@ export default {
     }, 500),
 
     setAdresseData: function(selected) {
-      console.log(selected);
-      this.adressSelected = selected;
+      this.formData.adress = selected?.properties.name;
+      this.formData.codePostal = selected?.properties.postcode;
+      this.formData.ville = selected?.properties.city;
+    },
 
-      this.codePostal = this.adressSelected?.properties.postcode;
-      this.ville = this.adressSelected?.properties.city;
+    /**
+     * Méthode générique permettant de vérifier si tous les éléments d'un formulaire sont bien remplis
+     * Renvoie false si il n'y a pas d'erreurs, true sinon
+     * @returns {boolean}
+     */
+    checkData: function() {
+      let errorExist = false;
+      let statusArray = [];
+
+      for (const [varName, data] of Object.entries(this.formData)) {
+        // If no data supplied in the inputs
+        if(!data) {
+          this.validationFields[varName].status = "is-danger";
+          errorExist = true;
+        } else {
+          this.validationFields[varName].status = "is-success";
+          // Get all the status of the form Validation and check if they are all set as 'is-success'
+          for (const [, state] of Object.entries(this.validationFields)) {
+            statusArray.push(state.status);
+          }
+
+          errorExist = !statusArray.every(status => status === "is-success");
+        }
+      }
+      return errorExist;
     },
 
     sendData: async function () {
-      !this.client ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
-      !this.devis ? this.validationFields.devis.status = "is-danger" : this.validationFields.devis.status = "is-success";
-      !this.libelle ? this.validationFields.libelle.status = "is-danger" : this.validationFields.libelle.status = "is-success";
-      !this.selectedDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
-
-      if (!(this.validationFields.client.status === "is-danger" || this.validationFields.devis.status === "is-danger" || this.validationFields.libelle.status === "is-danger" || this.validationFields.date.status === "is-danger")) {
+      let isIncomplete = this.checkData();
+      if (!isIncomplete) {
         this.$nuxt.$loading.start()
         await this.$axios.$post('http://localhost:3000/project', {
           "client": this.client,
@@ -181,7 +248,7 @@ export default {
             this.$nuxt.$loading.finish()
             this.$router.push(`/consulter-projet/${id}`);
           })
-          .catch((err) => {
+          .catch(err => {
             {
               this.$buefy.notification.open({
                 message: 'Une erreur est survenue, veuillez réessayer plus tard.',
@@ -200,6 +267,20 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+  .flat-button {
+    width: 100%;
+    min-height: 135px;
+    border-radius: 5px;
+    border: 1px solid #dbdbdb;
+    background-color: transparent;
 
+    &:hover {
+      background: lighten(lightgray, 15%);
+    }
+
+    &.is-selected {
+      background: lighten(#3498DB, 15%);
+    }
+  }
 </style>
