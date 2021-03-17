@@ -1,7 +1,5 @@
 <template>
   <div class="container mb-6">
-
-
     <b-navbar class="is-spaced">
       <template #brand>
         <b-navbar-item tag="router-link" :to="{ path: '/' }">
@@ -17,10 +15,6 @@
         <NuxtLink to="/creer-devis" class="navbar-item">Créer un devis</NuxtLink>
         <NuxtLink to="/consulter-projet" class="navbar-item">Consulter les projets</NuxtLink>
         <NuxtLink to="/consulter-devis" class="navbar-item">Consulter les devis</NuxtLink>
-
-        <b-navbar-item href="#">
-          Consulter les devis
-        </b-navbar-item>
 
         <b-dropdown
           v-if="isAuthenticated"
