@@ -18,7 +18,7 @@
               <li>Projet : <span class="has-text-primary">{{ devisData.projet }}</span></li>
             </ul>
 
-            <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
+            <NuxtLink :to="`/consulter-devis/editer-devis/${devisData.id}`"><b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button></NuxtLink>
           </div>
           <div class="column is-0-tablet-only">
             <figure class="is-inline-block">

@@ -26,7 +26,6 @@
 
         <div class="columns is-multiline">
           <CardDevis v-for="devis in devisData" :key="devis.id" :data="devis"></CardDevis>
-
         </div>
       </div>
     </div>
