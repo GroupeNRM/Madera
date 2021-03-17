@@ -52,7 +52,6 @@ export class UserController {
         user.firstName = firstName;
         user.lastName = lastName;
         user.password = hashedPassword;
-        user.age = age;
         user.email = email;
         user.role = role;
 

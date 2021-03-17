@@ -13,9 +13,9 @@
             </MainTitle>
 
             <ul class="info-devis mb-3">
-              <li>Reference : <span style="color: #0099ff ">{{ devisData.reference }}</span></li>
-              <li>Client : <span style="color: #0099ff ">{{ devisData.client }}</span></li>
               <li>Projet : <span class="has-text-primary">{{ devisData.projet }}</span></li>
+              <li>Reference : {{ devisData.reference }}</li>
+              <li>Client : {{ devisData.client }}</li>
             </ul>
 
             <b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button>
