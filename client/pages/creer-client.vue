@@ -39,19 +39,19 @@
             placeholder="06.66.66.66.66"
             v-on:input="validationFields.telephone.status = ''"
             v-model="formData.telephone"
-            maxlength="65">
+            maxlength="10">
           </b-input>
         </b-field>
 
-        <b-field label="Particulier" class="column is-6">
-          <button class="flat-button" @click.prevent="formData.statutPro = 'Particulier'" :class="{ 'is-selected': formData.statutPro === 'Particulier' }">
-            <img src="~assets/img/user.svg" alt="">
+        <b-field label="Particulier" class="column is-6" :type="validationFields.statutPro.status" :message="validationFields.statutPro.status === 'is-danger' ? validationFields.statutPro.message : ''">
+          <button class="flat-button" @click.prevent="formData.statutPro = 'Particulier'" :class="{ 'is-selected': formData.statutPro === 'Particulier' }" @click="validationFields.statutPro.status = ''">
+            <img src="~assets/img/user.svg" alt="User icon">
           </button>
         </b-field>
 
-        <b-field label="Professionnel" class="column is-6">
-          <button class="flat-button" @click.prevent="formData.statutPro = 'Professionnel'" :class="{ 'is-selected': formData.statutPro === 'Professionnel' }">
-            <img src="~assets/img/collectivite.svg" alt="">
+        <b-field label="Professionnel" class="column is-6" :type="validationFields.statutPro.status" :message="validationFields.statutPro.status === 'is-danger' ? validationFields.statutPro.message : ''">
+          <button class="flat-button" @click.prevent="formData.statutPro = 'Professionnel'" :class="{ 'is-selected': formData.statutPro === 'Professionnel' }" @click="validationFields.statutPro.status = ''">
+            <img src="~assets/img/collectivite.svg" alt="Professionnal icon">
           </button>
         </b-field>
 
@@ -81,6 +81,7 @@
 
         <b-field label="Ville" class="column is-4" :type="validationFields.ville.status" :message="validationFields.ville.status === 'is-danger' ? validationFields.ville.message : ''">
           <b-input
+            v-on:change="validationFields.ville.status = ''"
             v-model="formData.ville"
             placeholder="Paris"
             :value="formData.ville"
@@ -89,7 +90,7 @@
         </b-field>
 
         <b-field label="Code Postal" class="column is-2" :type="validationFields.codePostal.status" :message="validationFields.codePostal.status === 'is-danger' ? validationFields.codePostal.message : ''">
-          <b-input v-model="formData.codePostal" :value="formData.codePostal" placeholder="93160"></b-input>
+          <b-input v-model="formData.codePostal" :value="formData.codePostal" v-on:change="validationFields.codePostal.status = ''" placeholder="93160"></b-input>
         </b-field>
       </div>
 
@@ -118,9 +119,6 @@ export default {
   },
   data() {
     return {
-      selectedDate: new Date(),
-      locale: "fr-FR",
-
       formData: {
         prenom: undefined,
         nom: undefined,
@@ -168,7 +166,8 @@ export default {
       },
 
       isFetching: false,
-      adresses: []
+      adresses: [],
+      errorExist: false
     }
   },
   methods: {
@@ -198,6 +197,9 @@ export default {
       this.formData.adress = selected?.properties.name;
       this.formData.codePostal = selected?.properties.postcode;
       this.formData.ville = selected?.properties.city;
+
+      this.validationFields.ville.status = "";
+      this.validationFields.codePostal.status = "";
     },
 
     /**
@@ -216,12 +218,11 @@ export default {
           errorExist = true;
         } else {
           this.validationFields[varName].status = "is-success";
-          // Get all the status of the form Validation and check if they are all set as 'is-success'
-          for (const [, state] of Object.entries(this.validationFields)) {
-            statusArray.push(state.status);
+          for(const [, state] of Object.entries(this.validationFields)) {
+            if (state.status !== "is-success") {
+              break;
+            }
           }
-
-          errorExist = !statusArray.every(status => status === "is-success");
         }
       }
       return errorExist;
@@ -231,22 +232,18 @@ export default {
       let isIncomplete = this.checkData();
       if (!isIncomplete) {
         this.$nuxt.$loading.start()
-        await this.$axios.$post('http://localhost:3000/project', {
-          "client": this.client,
-          "devis": this.devis,
-          "libelle": this.libelle,
-          "dateCreation": this.selectedDate
+        await this.$axios.$post('http://localhost:3000/client', {
+          ...this.formData
         })
           .then(({id}) => {
             this.$buefy.notification.open({
-              message: 'Le projet a bien été crée !',
+              message: 'Le client a bien été crée !',
               type: 'is-success',
               duration: 3000,
               closable: false,
               autoClose: true
             });
             this.$nuxt.$loading.finish()
-            this.$router.push(`/consulter-projet/${id}`);
           })
           .catch(err => {
             {
@@ -263,7 +260,7 @@ export default {
           });
       }
     },
-  }
+  },
 }
 </script>
 

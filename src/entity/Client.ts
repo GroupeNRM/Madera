@@ -1,31 +1,35 @@
-import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Unique} from "typeorm";
 import {Project} from "./Project";
 
 @Entity()
+@Unique(['email'])
 export class Client {
     @PrimaryGeneratedColumn()
     id: number
 
     @Column()
-    nom: string;
+    firstName: string;
 
     @Column()
-    prenom: string;
+    lastName: string;
 
     @Column()
-    adresse: string;
+    email: string;
 
     @Column()
-    code_postal: number;
+    phone_number: string;
 
     @Column()
-    ville: string;
+    adress: string;
 
     @Column()
-    libelle: string;
+    zip_code: number;
 
     @Column()
-    isParticulier: boolean;
+    city: string;
+
+    @Column()
+    pro_status: string;
 
     @OneToMany(() => Project, project => project.client)
     projects: Project[];
