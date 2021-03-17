@@ -167,7 +167,6 @@ export default {
 
       isFetching: false,
       adresses: [],
-      errorExist: false
     }
   },
   methods: {
