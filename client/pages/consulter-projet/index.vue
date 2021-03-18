@@ -9,6 +9,7 @@
 
         <div class="columns is-multiline">
           <Card v-for="project in projects" :key="project.id" :data="project"></Card>
+   
         </div>
       </div>
     </div>

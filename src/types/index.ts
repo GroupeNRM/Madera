@@ -1,7 +1,7 @@
 import { Session } from 'express-session'
+import {User} from "../entity/User";
+import {Request} from "express";
 
-declare module 'express-session' {
-    interface Session {
-        userId: number;
-    }
+export interface IGetUserAuthInfoRequest extends Request {
+    user: User
 }
