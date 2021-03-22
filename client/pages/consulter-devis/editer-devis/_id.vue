@@ -7,7 +7,6 @@
 
     <form class="form-container">
       <div class="columns is-multiline">
-        <!-- TODO : Script pour récupérer les projets de la BDD + Afficher (Liste avec recherche texte si possible) -->
         <b-field label="Projet" class="column is-half" :type="validationFields.projet.status" :message="validationFields.projet.status === 'is-danger' ? validationFields.projet.message : ''">
           <b-select
             v-model="formData.selectProjet"
@@ -21,7 +20,6 @@
           </b-select>
         </b-field>
 
-        <!-- TODO : Script pour récupérer les clients de la BDD + Afficher (Liste avec recherche texte si possible) -->
         <b-field label="Client" class="column is-half" :type="validationFields.client.status" :message="validationFields.client.status === 'is-danger' ? validationFields.client.message : ''">
           <b-select
             v-model="formData.selectClient"
@@ -116,7 +114,7 @@ export default {
     }
   },
   methods: {
-    sendData: async function(){
+    sendData: async function() {
       !this.formData.selectClient ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
       !this.formData.selectProjet ? this.validationFields.projet.status = "is-danger" : this.validationFields.projet.status = "is-success";
       !this.formData.selectEchelonnement ? this.validationFields.echelonnement.status = "is-danger" : this.validationFields.echelonnement.status = "is-success";
@@ -125,13 +123,11 @@ export default {
       if(!(this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.echelonnement.status === "is-danger")){
         this.$nuxt.$loading.start();
 
-        // Requête PATCH
-        await this.$axios.$put(`http://localhost:3000/devis/${this.$route.params.id}`, {
-          "updatedAt": this.inputDate,
-          "projet": this.selectProjet,
-          "client": this.selectClient,
-          "reference": this.inputReference,
-          "echelonnement": this.selectEchelonnement
+        await this.$axios.$patch(`http://localhost:3000/devis/update-devis/${this.$route.params.id}`, {
+          "projet": this.formData.selectProjet,
+          "client": this.formData.selectClient,
+          "reference": this.formData.inputReference,
+          "echelonnement": this.formData.selectEchelonnement
         })
         .then(({id}) => {
           this.$buefy.notification.open({
@@ -166,7 +162,6 @@ export default {
     this.formData.selectClient = this.devisData.client;
     this.formData.inputReference = this.devisData.reference;
     this.formData.selectEchelonnement = this.devisData.echelonnement;
-    console.log(this.devisData);
   }
 }
 </script>

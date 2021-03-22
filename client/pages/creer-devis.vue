@@ -229,7 +229,6 @@ export default {
       if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.nbrMaison.status === "is-danger" || this.validationFields.remise.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
         this.$nuxt.$loading.start();
 
-        // Requête POST
         await this.$axios.$post('http://localhost:3000/devis', {
           "createdAt": this.inputDate,
           "projet": this.inputProjet,

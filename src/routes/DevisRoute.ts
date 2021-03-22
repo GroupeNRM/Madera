@@ -9,7 +9,7 @@ router.get('/:id([0-9]+)', DevisController.findOneById);
 
 router.put('/:id([0-9]+)', DevisController.archiveDevis);
 
-router.put('/:id([0-9]+)', DevisController.updateDevis);
+router.patch('/update-devis/:id([0-9]+)', DevisController.updateDevis);
 
 router.get('/', DevisController.findAll);
 
