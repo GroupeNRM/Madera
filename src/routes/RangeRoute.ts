@@ -8,4 +8,6 @@ router.post('/', checkJwt, RangeController.add);
 
 router.get('/', checkJwt, RangeController.findAll);
 
+router.get('/getLast', checkJwt, RangeController.findLastOne);
+
 export default router;

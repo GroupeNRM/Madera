@@ -10,7 +10,7 @@
           <div>
             <b-button type="is-success" class="ml-auto mr-6 is-block" @click="isActive = true">Créer une nouvelle gamme</b-button>
           </div>
-          <section class="container">
+          <section>
             <b-table
               :data="isEmpty ? [] : gammes[0]"
               :bordered="false"

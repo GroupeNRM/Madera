@@ -44,7 +44,7 @@
             <h3 class="is-size-3 has-text-weight-bold column is-8">Dernières activités</h3>
             <h3 class="is-size-3 has-text-weight-bold column is-4">Dernière gamme</h3>
           </div>
-          <div class="columns pt-5">
+          <div class="columns">
             <div class="column is-8">
               <section>
                 <b-table
@@ -79,34 +79,19 @@
             </div>
 
             <div class="column is-4">
-              <b-table
-                :data="isEmpty ? [] : activities"
-                :bordered="isBordered"
-                :striped="isStriped"
-                :narrowed="isNarrowed"
-                :hoverable="isHoverable"
-                :loading="isLoading"
-                :focusable="isFocusable"
-                :mobile-cards="hasMobileCards">
+              <div class="flat-card">
+                <div class="flat-card-header">
+                  <img class="black-box is-inline-block" src="~assets/img/gamme.svg" height="50px" width="50px" alt="">
+                  <h3 class="is-size-5 is-inline-block is-title-card">Dernière gamme ajoutée</h3>
+                </div>
 
-                <b-table-column field="id" label="ID" width="40" numeric v-slot="props">
-                  {{ props.row.id }}
-                </b-table-column>
-
-                <b-table-column field="first_name" label="Libellé" v-slot="props">
-                  {{ props.row.libelle }}
-                </b-table-column>
-
-                <b-table-column field="last_name" label="Emetteur" v-slot="props">
-                  {{ props.row.emitter }}
-                </b-table-column>
-
-                <b-table-column field="date" label="Date" centered v-slot="props">
-                  <span class="tag is-success">
-                    {{ new Date(props.row.createdAt).toLocaleDateString() }}
-                  </span>
-                </b-table-column>
-              </b-table>
+                <p class="is-size-2 has-text-weight-bold">{{ this.lastGamme.libelle }}</p>
+                <p class="subtitle mb-2">Reference : {{ this.lastGamme.reference }}</p>
+                <p class="subtitle mb-2">Type d'angle : {{ this.lastGamme.typeAngle }}</p>
+                <p class="subtitle mb-2">Type de couverture : {{ this.lastGamme.typeCouverture }}</p>
+                <p class="subtitle mb-2">Type de finition : {{ this.lastGamme.typeFinition }}</p>
+                <p class="subtitle mb-2">Type d'isolant : {{ this.lastGamme.typeIsolant }}</p>
+              </div>
             </div>
           </div>
         </div>
@@ -123,6 +108,7 @@ export default {
   data() {
     return {
       activities: [],
+      lastGamme: [],
 
       open: true,
       overlay: false,
@@ -157,9 +143,23 @@ export default {
           autoClose: true
         })
       })
-      .finally(() => {
-        this.$nuxt.$loading.finish();
+
+    this.$axios.$get('http://localhost:3000/range/getLast')
+    .then(res => {
+      this.lastGamme = res;
+    })
+    .catch(e => {
+      this.$buefy.notification.open({
+        message: 'Une erreur est survenue, veuillez réessayer plus tard.',
+        type: 'is-danger',
+        duration: 3000,
+        closable: false,
+        autoClose: true
       })
+    })
+    .finally(() => {
+      this.$nuxt.$loading.finish();
+    })
   }
 };
 </script>

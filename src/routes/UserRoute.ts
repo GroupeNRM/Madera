@@ -17,6 +17,6 @@ router.get('/me', checkJwt, UserController.me);
 
 router.put('/validate', UserController.validate);
 
-router.put('/update-role', checkJwt, UserController.updateRole)
+router.patch('/update-role', checkJwt, UserController.updateRole)
 
 export default router;

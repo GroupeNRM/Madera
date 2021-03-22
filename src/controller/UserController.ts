@@ -8,10 +8,10 @@ import {IGetUserAuthInfoRequest} from "../types";
 import {sendMail} from "../services/MailService";
 
 export class UserController {
-    static async all(request: Request, response: Response, next: NextFunction) {
+    static async all(request: Request, response: Response) {
         const userRepository = getRepository(User);
         const users = await userRepository.find({
-            select: ["id", "firstName", "lastName", "email", "isActive", "role", "createdAt"]
+            select: ["id", "firstName", "lastName", "email", "isActive", "role", "createdAt", "updatedAt"]
         });
 
         response.send(users);

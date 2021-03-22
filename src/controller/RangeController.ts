@@ -1,5 +1,6 @@
 import {Request, Response} from "express";
-import {getRepository} from "typeorm";
+import {getCustomRepository, getRepository} from "typeorm";
+import {RangeRepository} from "../repository/RangeRepository";
 import {Range} from "../entity/Range";
 
 export class RangeController {
@@ -31,5 +32,18 @@ export class RangeController {
         const ranges = await rangeRepository.findAndCount();
 
         response.send(ranges);
+    }
+
+    static async findLastOne(request: Request, response: Response) {
+        const rangeRepository = getCustomRepository(RangeRepository);
+        let range: Range
+
+        try {
+            range = await rangeRepository.findLastOne();
+        } catch (e) {
+            response.status(404).send({message: "Il n'existe pas encore de gamme !"});
+        }
+
+        response.send(range);
     }
 }

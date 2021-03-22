@@ -3,7 +3,7 @@
     <div class="columns is-fullheight mt-0">
       <Sidebar/>
       <div class="column is-10 section is-poppins">
-        <section class="container">
+        <section>
           <b-table
             :data="isEmpty ? [] : users"
             :bordered="false"
@@ -45,6 +45,12 @@
             <b-table-column field="date" label="Date de création" v-slot="props">
               <span class="tag is-success">
                 {{ new Date(props.row.createdAt).toLocaleDateString() }}
+              </span>
+            </b-table-column>
+
+            <b-table-column field="dateMiseAJour" label="Date de mise à jour" v-slot="props">
+              <span class="tag is-success">
+                {{ new Date(props.row.updatedAt).toLocaleDateString() }}
               </span>
             </b-table-column>
           </b-table>
@@ -94,7 +100,7 @@ export default {
 
     updateRole(event, userId) {
       this.$nuxt.$loading.start();
-      this.$axios.$put('http://localhost:3000/user/update-role ', {
+      this.$axios.$patch('http://localhost:3000/user/update-role ', {
         'id': userId,
         'role': event
       })
