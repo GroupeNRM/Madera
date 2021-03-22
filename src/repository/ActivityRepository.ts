@@ -6,6 +6,7 @@ export class ActivityRepository extends Repository<Activity> {
     async findLastFive() {
         return await this.createQueryBuilder("activity")
             .limit(10)
+            .orderBy('activity.id', 'DESC')
             .getMany();
     }
 }

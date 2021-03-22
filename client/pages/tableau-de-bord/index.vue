@@ -134,7 +134,7 @@ export default {
       isBordered: false,
       isStriped: false,
       isNarrowed: false,
-      isHoverable: false,
+      isHoverable: true,
       isFocusable: false,
       isLoading: false,
       hasMobileCards: true
@@ -199,10 +199,5 @@ export default {
         vertical-align: middle;
       }
     }
-  }
-
-  .is-poppins {
-    color: #2F2C37;
-    font-family: 'Poppins', sans-serif;
   }
 </style>
