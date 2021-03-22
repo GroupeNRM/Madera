@@ -43,6 +43,33 @@ export class DevisController {
         response.send(devis);
     }
 
+    static updateDevis = async (request: Request, response: Response) => {
+        const devisRepository = getRepository(Devis);
+        const id = request.params.id;
+        const { projet, client, reference, echelonnement } = request.body;
+
+        let devis: Devis;
+
+        try {
+            devis = await devisRepository.findOneOrFail(id);
+
+            devis.projet = projet;
+            devis.client = client;
+            devis.reference = reference;
+            devis.echelonnement = echelonnement;
+
+            try {
+                await devisRepository.save(devis);
+            } catch (e) {
+                return response.status(400).send({ message: "Erreur dans la sauvegarde du devis" });
+            }
+        } catch (e) {
+            return response.status(404).send({ message: "Aucun devis avec cet ID" });
+        }
+
+        return response.send(devis);
+    }
+
     static archiveDevis = async (request: Request, response: Response) => {
         const devisRepository = getRepository(Devis);
         const id = request.params.id;
