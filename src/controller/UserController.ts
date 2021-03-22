@@ -1,6 +1,6 @@
 import {getRepository} from "typeorm";
 import {NextFunction, Request, Response} from "express";
-import {User} from "../entity/User";
+import {User, UserRole} from "../entity/User";
 import argon2 from "argon2";
 const crypto = require('crypto');
 import {generateAccessToken} from "../middleware/auth";
@@ -8,11 +8,10 @@ import {IGetUserAuthInfoRequest} from "../types";
 import {sendMail} from "../services/MailService";
 
 export class UserController {
-    
-    static async all(request: Request, response: Response, next: NextFunction) {
+    static async all(request: Request, response: Response) {
         const userRepository = getRepository(User);
         const users = await userRepository.find({
-            select: ["id", "firstName", "role"]
+            select: ["id", "firstName", "lastName", "email", "isActive", "role", "createdAt", "updatedAt"]
         });
 
         response.send(users);
@@ -162,5 +161,41 @@ export class UserController {
         } catch (e) {
             return response.status(400).send({message: "Erreur dans le lien de validation"});
         }
+    }
+
+    static async updateRole(request: Request, response: Response) {
+        const userRepository = getRepository(User);
+        const { id, role } = request.body;
+
+        let user: User;
+
+        try {
+            user = await userRepository.findOne(id);
+        } catch (e) {
+            response.status(400).send({message: "Il n'y a pas d'utilisateurs avec cet ID"});
+        }
+
+        let trueRole;
+
+        if(role === "ROLE_BASIC") {
+            trueRole = UserRole.BASIC;
+        } else if(role === "ROLE_CLIENT") {
+            trueRole = UserRole.CLIENT;
+        } else if(role === "ROLE_ADMIN") {
+            trueRole = UserRole.ADMIN;
+        } else {
+            response.status(404).send({message: "Le rôle n'existe pas"})
+        }
+
+        user.role = trueRole;
+
+        try {
+            await userRepository.save(user);
+        } catch (e) {
+            response.status(400).send({ message: "Une erreur est survenue lors de la mise à jour du rôle"});
+            console.log(e);
+        }
+
+        response.status(200).send({message: "Le rôle de l'utilisateur à bien été mis à jour"});
     }
 }
