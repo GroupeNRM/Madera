@@ -180,9 +180,12 @@ export default {
         return
       }
       this.isFetching = true
-      this.$axios.$get(`https://api-adresse.data.gouv.fr/search/?q=${adressInput}&type=housenumber`)
+      // Fetch instead of Axios because Axios add Authorization header and he doesn't want to delete it even when I force him to
+      fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressInput}&type=housenumber`)
         .then(data => {
-          data.features.forEach((adress) => this.adresses.push(adress))
+          data.json().then(formattedData => {
+            formattedData.features.forEach((adress) => this.adresses.push(adress))
+          })
         })
         .catch((error) => {
           throw error
