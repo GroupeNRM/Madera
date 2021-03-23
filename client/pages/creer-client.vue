@@ -45,7 +45,7 @@
 
         <b-field label="Particulier" class="column is-6" :type="validationFields.statutPro.status" :message="validationFields.statutPro.status === 'is-danger' ? validationFields.statutPro.message : ''">
           <button class="flat-button" @click.prevent="formData.statutPro = 'Particulier'" :class="{ 'is-selected': formData.statutPro === 'Particulier' }" @click="validationFields.statutPro.status = ''">
-            <img src="~assets/img/user.svg" alt="User icon">
+            <img src="~assets/img/userflat.svg" alt="User icon">
           </button>
         </b-field>
 
@@ -211,7 +211,6 @@ export default {
      */
     checkData: function() {
       let errorExist = false;
-      let statusArray = [];
 
       for (const [varName, data] of Object.entries(this.formData)) {
         // If no data supplied in the inputs

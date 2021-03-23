@@ -6,11 +6,10 @@ export class ProjectController {
     static async createProject(request: Request, response: Response) {
         const projectRepository = getRepository(Project);
 
-        const { client, devis, libelle, dateCreation } = request.body;
+        const { client, libelle, dateCreation } = request.body;
 
         const project = new Project();
         project.client = client;
-        project.devis = devis;
         project.libelle = libelle;
         project.dateCreation = dateCreation;
 
@@ -28,9 +27,7 @@ export class ProjectController {
         let project: Project;
 
         try {
-            project = await projectRepository.findOneOrFail(request.params.id, {
-                select: ["id", "client", "devis", "libelle", "dateCreation", "isActive"]
-            });
+            project = await projectRepository.findOneOrFail(request.params.id);
         } catch (e) {
             return response.status(404).send({message: "Project not found"})
         }

@@ -26,4 +26,11 @@ export class ClientController {
 
         response.send(client);
     }
+
+    static all = async (request: Request, response: Response) => {
+        const clientRepository = getRepository(Client);
+        const clients = await clientRepository.findAndCount();
+
+        response.send(clients);
+    }
 }

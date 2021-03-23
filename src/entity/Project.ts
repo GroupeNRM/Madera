@@ -6,11 +6,10 @@ export class Project {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Client, client => client.projects)
+    @ManyToOne(() => Client, client => client.projects, {
+        eager: true
+    })
     client: string
-
-    @Column()
-    devis: string
 
     @Column()
     libelle: string
