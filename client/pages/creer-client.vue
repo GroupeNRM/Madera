@@ -95,7 +95,7 @@
       </div>
 
       <div class="column is-full has-text-centered">
-        <b-button type="is-info" v-on:click="sendData" outlined>Créer le projet</b-button>
+        <b-button type="is-info" v-on:click="sendData" outlined>Créer le client</b-button>
       </div>
     </form>
   </div>
