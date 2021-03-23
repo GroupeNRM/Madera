@@ -43,6 +43,7 @@
 
 <script>
 export default {
+  middleware: 'admin-access',
   head(){
     return {
       title: "Editer un devis",

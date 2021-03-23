@@ -10,14 +10,12 @@
         </b-navbar-item>
       </template>
 
-      <template #end>
+      <template #end v-if="isAuthenticated">
+        <NuxtLink to="/creer-client" class="navbar-item">Créer un client</NuxtLink>
         <NuxtLink to="/creer-projet" class="navbar-item">Créer un projet</NuxtLink>
         <NuxtLink to="/creer-devis" class="navbar-item">Créer un devis</NuxtLink>
-        <NuxtLink to="/consulter-projet" class="navbar-item">Consulter les projets</NuxtLink>
-        <NuxtLink to="/consulter-devis" class="navbar-item">Consulter les devis</NuxtLink>
 
         <b-dropdown
-          v-if="isAuthenticated"
           position="is-bottom-left"
           append-to-body
           aria-role="menu">
@@ -39,13 +37,11 @@
               Tableau de bord
             </NuxtLink>
           </b-dropdown-item>
-          <b-dropdown-item value="products" aria-role="menuitem">
-            <b-icon icon="cart"></b-icon>
-            Products
-          </b-dropdown-item>
-          <b-dropdown-item value="blog" disabled aria-role="menuitem">
-            <b-icon icon="book-open"></b-icon>
-            Blog
+          <b-dropdown-item value="products" has-link aria-role="menuitem">
+            <NuxtLink to="/tableau-de-bord/gammes">
+              <b-icon icon="cart"></b-icon>
+              Ajouter une gamme
+            </NuxtLink>
           </b-dropdown-item>
           <hr class="dropdown-divider" aria-role="menuitem">
           <b-dropdown-item value="settings">

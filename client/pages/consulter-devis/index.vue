@@ -35,6 +35,7 @@
 <script>
 export default {
   name: "index",
+  middleware: 'admin-access',
   head() {
     return {
       title: "Consulter les devis",

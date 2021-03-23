@@ -56,6 +56,7 @@
 
 <script>
 export default {
+  middleware: 'admin-access',
   head() {
     return {
       title: "Visualiser un projet",

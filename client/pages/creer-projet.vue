@@ -49,6 +49,7 @@
 <script>
 export default {
   name: "creer-projet",
+  middleware: 'admin-access',
   head() {
     return {
       title: "Créer un nouveau projet",

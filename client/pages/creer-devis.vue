@@ -85,6 +85,7 @@
 <script>
 export default {
   name: "creer-devis",
+  middleware: 'admin-access',
   head() {
     return {
       title: "Créer un nouveau devis",
