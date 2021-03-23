@@ -1,6 +1,15 @@
-import { Entity, Column, CreateDateColumn, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
-@Entity()
+import {
+    Entity,
+    Column,
+    CreateDateColumn,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn,
+    OneToOne,
+    JoinColumn, ManyToOne
+} from "typeorm";
+import {Project} from "./Project";
 
+@Entity()
 export class Devis {
     @PrimaryGeneratedColumn()
     id: number
@@ -26,11 +35,11 @@ export class Devis {
     @UpdateDateColumn()
     updatedAt: Date
 
-    @Column()
+    @OneToOne(() => Project, {
+        eager: true
+    })
+    @JoinColumn()
     projet: string
-
-    @Column()
-    client: string
 
     @Column({
         default: true

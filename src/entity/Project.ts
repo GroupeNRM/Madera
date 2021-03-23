@@ -1,4 +1,4 @@
-import {Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
+import {Column, CreateDateColumn, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn, UpdateDateColumn} from "typeorm";
 import {Client} from "./Client";
 
 @Entity()
@@ -6,11 +6,10 @@ export class Project {
     @PrimaryGeneratedColumn()
     id: number
 
-    @ManyToOne(() => Client, client => client.projects)
+    @ManyToOne(() => Client, client => client.projects, {
+        eager: true
+    })
     client: string
-
-    @Column()
-    devis: string
 
     @Column()
     libelle: string

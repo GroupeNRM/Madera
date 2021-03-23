@@ -45,7 +45,7 @@
 
         <b-field label="Particulier" class="column is-6" :type="validationFields.statutPro.status" :message="validationFields.statutPro.status === 'is-danger' ? validationFields.statutPro.message : ''">
           <button class="flat-button" @click.prevent="formData.statutPro = 'Particulier'" :class="{ 'is-selected': formData.statutPro === 'Particulier' }" @click="validationFields.statutPro.status = ''">
-            <img src="~assets/img/user.svg" alt="User icon">
+            <img src="~assets/img/userflat.svg" alt="User icon">
           </button>
         </b-field>
 
@@ -95,7 +95,7 @@
       </div>
 
       <div class="column is-full has-text-centered">
-        <b-button type="is-info" v-on:click="sendData" outlined>Créer le projet</b-button>
+        <b-button type="is-info" v-on:click="sendData" outlined>Créer le client</b-button>
       </div>
     </form>
   </div>
@@ -106,6 +106,7 @@ import debounce from 'lodash/debounce';
 
 export default {
   name: "creer-projet",
+  middleware: 'admin-access',
   head() {
     return {
       title: "Créer un nouveau client",
@@ -180,9 +181,12 @@ export default {
         return
       }
       this.isFetching = true
-      this.$axios.$get(`https://api-adresse.data.gouv.fr/search/?q=${adressInput}&type=housenumber`)
+      // Fetch instead of Axios because Axios add Authorization header and he doesn't want to delete it even when I force him to
+      fetch(`https://api-adresse.data.gouv.fr/search/?q=${adressInput}&type=housenumber`)
         .then(data => {
-          data.features.forEach((adress) => this.adresses.push(adress))
+          data.json().then(formattedData => {
+            formattedData.features.forEach((adress) => this.adresses.push(adress))
+          })
         })
         .catch((error) => {
           throw error
@@ -208,7 +212,6 @@ export default {
      */
     checkData: function() {
       let errorExist = false;
-      let statusArray = [];
 
       for (const [varName, data] of Object.entries(this.formData)) {
         // If no data supplied in the inputs

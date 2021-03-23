@@ -9,7 +9,7 @@
 
         <div class="columns is-multiline">
           <Card v-for="project in projects" :key="project.id" :data="project"></Card>
-   
+
         </div>
       </div>
     </div>
@@ -19,6 +19,7 @@
 <script>
 export default {
   name: "index",
+  middleware: 'admin-access',
   head() {
     return {
       title: "Consulter les projets",

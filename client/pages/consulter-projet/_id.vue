@@ -13,9 +13,8 @@
             </MainTitle>
 
             <ul class="info-project mb-3">
-              <li>{{ projectData.client }}</li>
+              <li>{{projectData.client.firstName}} {{ projectData.client.lastName }}</li>
               <li>Projet : <span class="has-text-primary">{{ projectData.libelle }}</span></li>
-              <li>{{ projectData.devis }}</li>
             </ul>
 
             <div>
@@ -41,12 +40,12 @@
           </div>
           <div class="column">
             <InfoCard icon="account-outline">
-              <span slot="text-data">{{projectData.client}}</span>
+              <span slot="text-data">{{projectData.client.email}}</span>
             </InfoCard>
           </div>
           <div class="column">
             <InfoCard icon="map-marker-outline">
-              <span slot="text-data">{{projectData.client}}</span>
+              <span slot="text-data">{{projectData.client.city}}</span>
             </InfoCard>
           </div>
         </div>
@@ -57,6 +56,7 @@
 
 <script>
 export default {
+  middleware: 'admin-access',
   head() {
     return {
       title: "Visualiser un projet",
@@ -78,7 +78,6 @@ export default {
   },
   async fetch() {
     this.projectData = await this.$axios.$get(`http://localhost:3000/project/${this.$route.params.id}`);
-    console.log(this.projectData)
   },
   methods: {
     confirmArchive() {

@@ -27,7 +27,7 @@
         </a>
       </li>
       <li>
-        <a>
+        <NuxtLink to="/consulter-devis">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="is-vcentered-icon mr-3">
             <g id="Iconly/Broken/Edit Square">
               <g id="Edit Square">
@@ -36,10 +36,10 @@
             </g>
           </svg>
           Devis
-        </a>
+        </NuxtLink>
       </li>
       <li>
-        <a>
+        <NuxtLink to="/consulter-projet">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="is-vcentered-icon mr-3">
             <g id="Iconly/Broken/Document">
               <g id="Document">
@@ -48,7 +48,7 @@
             </g>
           </svg>
           Projets
-        </a>
+        </NuxtLink>
       </li>
       <li>
         <NuxtLink to="/tableau-de-bord/gammes">
