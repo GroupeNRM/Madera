@@ -13,9 +13,9 @@
             </MainTitle>
 
             <ul class="info-devis mb-3">
-              <li>Projet : <span class="has-text-primary">{{ devisData.projet }}</span></li>
+              <li>Projet : <span class="has-text-primary">{{ devisData.projet.libelle }}</span></li>
               <li>Reference : {{ devisData.reference }}</li>
-              <li>Client : {{ devisData.client }}</li>
+              <li>Client : {{ devisData.projet.client.firstName }} {{ devisData.projet.client.lastName }}</li>
             </ul>
 
             <NuxtLink :to="`/consulter-devis/editer-devis/${devisData.id}`"><b-button class="pl-6 pr-6 mr-5" type="is-primary" outlined>Editer</b-button></NuxtLink>

@@ -1,5 +1,6 @@
 import {Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn, Unique} from "typeorm";
 import {Project} from "./Project";
+import {Devis} from "./Devis";
 
 @Entity()
 @Unique(['email'])

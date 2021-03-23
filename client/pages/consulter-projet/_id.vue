@@ -77,7 +77,6 @@ export default {
   },
   async fetch() {
     this.projectData = await this.$axios.$get(`http://localhost:3000/project/${this.$route.params.id}`);
-    console.log(this.projectData)
   },
   methods: {
     confirmArchive() {

@@ -6,7 +6,7 @@ export class DevisController {
     static async createDevis(request: Request, response: Response) {
         const devisRepository = getRepository(Devis);
 
-        const { reference, total_ht, total_ttc, remise, echelonnement, createdAt, projet, client   } = request.body;
+        const { reference, total_ht, total_ttc, remise, echelonnement, createdAt, projet } = request.body;
 
         const devis = new Devis();
 
@@ -17,7 +17,6 @@ export class DevisController {
         devis.echelonnement = echelonnement;
         devis.createdAt = createdAt;
         devis.projet = projet;
-        devis.client = client;
 
         try {
             await devisRepository.save(devis);
@@ -33,9 +32,7 @@ export class DevisController {
         let devis: Devis;
 
         try {
-            devis = await devisRepository.findOneOrFail(request.params.id, {
-                select: ["id", "reference", "total_ht", "total_ttc", "remise", "echelonnement", "createdAt", "projet", "client", "isActive"]
-            });
+            devis = await devisRepository.findOneOrFail(request.params.id);
         } catch (e) {
             return response.status(404).send({ message: "Devis not found" })
         }
@@ -46,7 +43,7 @@ export class DevisController {
     static updateDevis = async (request: Request, response: Response) => {
         const devisRepository = getRepository(Devis);
         const id = request.params.id;
-        const { projet, client, reference, echelonnement } = request.body;
+        const { projet, reference, echelonnement } = request.body;
 
         let devis: Devis;
 
@@ -54,7 +51,6 @@ export class DevisController {
             devis = await devisRepository.findOneOrFail(id);
 
             devis.projet = projet;
-            devis.client = client;
             devis.reference = reference;
             devis.echelonnement = echelonnement;
 

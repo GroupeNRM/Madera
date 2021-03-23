@@ -20,31 +20,13 @@
           </b-datepicker>
         </b-field>
 
-        <!-- TODO : Script pour récupérer les projets de la BDD + Afficher (Liste avec recherche texte si possible) -->
         <b-field label="Projet" class="column is-half" :type="validationFields.projet.status" :message="validationFields.projet.status === 'is-danger' ? validationFields.projet.message : ''">
           <b-select
             placeholder="Selectionner un projet"
             v-model="inputProjet"
             v-on:input="validationFields.projet.status = ''"
             expanded>
-            <option>Projet - Parc de la Chartreuse</option>
-            <option>Projet - Parc des Pyrénées</option>
-            <option>Projet - Parc des Ardennes</option>
-          </b-select>
-        </b-field>
-
-        <!-- TODO : Script pour récupérer les clients de la BDD + Afficher (Liste avec recherche texte si possible) -->
-        <b-field label="Client" class="column is-full" :type="validationFields.client.status" :message="validationFields.client.status === 'is-danger' ? validationFields.client.message : ''">
-          <b-select
-            placeholder="Selectionner un client"
-            v-model="inputClient"
-            v-on:input="validationFields.client.status = ''"
-            expanded>
-            <option>Mairie de Grenoble</option>
-            <option>Ville de Lyon</option>
-            <option>Annecy Vision</option>
-            <option>M. John</option>
-            <option>Mme. Jane</option>
+            <option v-for="projet in listingProjet" :value="projet.id" :key="projet.id">{{ projet.libelle }}</option>
           </b-select>
         </b-field>
 
@@ -118,7 +100,6 @@ export default {
     return {
       inputDate: new Date(),
       inputProjet: undefined,
-      inputClient: undefined,
       inputReference: undefined,
       inputGammeMaison: undefined,
       inputNbrMaison: 1,
@@ -129,6 +110,8 @@ export default {
       showWeekNumber: false,
       echelonnement: "0%",
 
+      listingProjet: [],
+
       validationFields: {
         date: {
           status: "",
@@ -137,10 +120,6 @@ export default {
         projet: {
           status: "",
           message: "Merci de sélectionner un projet"
-        },
-        client: {
-          status: "",
-          message: "Merci de sélectionner votre client"
         },
         reference: {
           status: "",
@@ -220,19 +199,17 @@ export default {
     sendData: async function() {
       !this.inputDate ? this.validationFields.date.status = "is-danger" : this.validationFields.date.status = "is-success";
       !this.inputProjet ? this.validationFields.projet.status = "is-danger" : this.validationFields.projet.status = "is-success";
-      !this.inputClient ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
       !this.inputReference ? this.validationFields.reference.status = "is-danger" : this.validationFields.reference.status = "is-success";
       this.inputNbrMaison === 0 ? this.validationFields.nbrMaison.status = "is-danger" : this.validationFields.nbrMaison.status = "is-success";
       !this.inputRemise ? this.validationFields.remise.status = "is-danger" : this.validationFields.remise.status = "is-success";
       this.inputTotalTTC === 0 ? this.validationFields.prixTTC.status = "is-danger" : this.validationFields.prixTTC.status = "is-success";
 
-      if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.nbrMaison.status === "is-danger" || this.validationFields.remise.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
+      if(!(this.validationFields.date.status === "is-danger" || this.validationFields.projet.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.nbrMaison.status === "is-danger" || this.validationFields.remise.status === "is-danger" || this.validationFields.prixTTC.status === "is-danger")){
         this.$nuxt.$loading.start();
 
         await this.$axios.$post('http://localhost:3000/devis', {
           "createdAt": this.inputDate,
           "projet": this.inputProjet,
-          "client": this.inputClient,
           "reference": this.inputReference,
           "remise": this.inputRemise,
           "echelonnement": "0%",
@@ -264,6 +241,24 @@ export default {
         });
       }
     }
+  },
+
+  // Shitty speedrun code
+  mounted() {
+    this.$axios.$get('http://localhost:3000/project')
+      .then(res => {
+        this.listingProjet = res[0];
+      })
+      .catch(e => {
+        console.log(e);
+        this.$buefy.notification.open({
+          message: 'Erreur lors de la récupération de la liste des projets.',
+          type: 'is-danger',
+          duration: 3000,
+          closable: false,
+          autoClose: true
+        });
+      })
   }
 }
 </script>

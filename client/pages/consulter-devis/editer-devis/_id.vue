@@ -7,43 +7,7 @@
 
     <form class="form-container">
       <div class="columns is-multiline">
-        <b-field label="Projet" class="column is-half" :type="validationFields.projet.status" :message="validationFields.projet.status === 'is-danger' ? validationFields.projet.message : ''">
-          <b-select
-            v-model="formData.selectProjet"
-            placeholder="Sélectionner un projet"
-            v-on:input=""
-            expanded
-          >
-            <option>Projet - Parc de la Chartreuse</option>
-            <option>Projet - Parc des Pyrénées</option>
-            <option>Projet - Parc des Ardennes</option>
-          </b-select>
-        </b-field>
-
-        <b-field label="Client" class="column is-half" :type="validationFields.client.status" :message="validationFields.client.status === 'is-danger' ? validationFields.client.message : ''">
-          <b-select
-            v-model="formData.selectClient"
-            placeholder="Selectionner un client"
-            expanded
-          >
-            <option>Mairie de Grenoble</option>
-            <option>Ville de Lyon</option>
-            <option>Annecy Vision</option>
-            <option>M. John</option>
-            <option>Mme. Jane</option>
-          </b-select>
-        </b-field>
-
-        <b-field label="Référence devis" class="column is-full" :type="validationFields.reference.status" :message="validationFields.reference.status === 'is-danger' ? validationFields.reference.message : ''">
-          <b-input
-            v-model="formData.inputReference"
-            placeholder="Saisir la référence du devis"
-            expanded
-          >
-          </b-input>
-        </b-field>
-
-        <b-field label="Mettre à jour l'échelonnement" class="column is-full" :type="validationFields.echelonnement.status" :message="validationFields.echelonnement.status === 'is-danger' ? validationFields.echelonnement.message : ''">
+        <b-field label="Mettre à jour l'échelonnement" class="column is-half" :type="validationFields.echelonnement.status" :message="validationFields.echelonnement.status === 'is-danger' ? validationFields.echelonnement.message : ''">
           <b-select
             v-model="formData.selectEchelonnement"
             placeholder="Sélectionner un échelonnement"
@@ -58,6 +22,15 @@
             <option>95%</option>
             <option>100%</option>
           </b-select>
+        </b-field>
+
+        <b-field label="Référence devis" class="column is-half" :type="validationFields.reference.status" :message="validationFields.reference.status === 'is-danger' ? validationFields.reference.message : ''">
+          <b-input
+            v-model="formData.inputReference"
+            placeholder="Saisir la référence du devis"
+            expanded
+          >
+          </b-input>
         </b-field>
 
         <div class="column is-full has-text-centered">
@@ -93,15 +66,9 @@ export default {
         selectEchelonnement: undefined
       },
 
+      listingProjet: [],
+
       validationFields: {
-        projet: {
-          status: "",
-          message: "Merci de sélectionner un projet"
-        },
-        client: {
-          status: "",
-          message: "Merci de sélectionner votre client"
-        },
         reference: {
           status: "",
           message: "Merci de saisir une reference"
@@ -115,17 +82,13 @@ export default {
   },
   methods: {
     sendData: async function() {
-      !this.formData.selectClient ? this.validationFields.client.status = "is-danger" : this.validationFields.client.status = "is-success";
-      !this.formData.selectProjet ? this.validationFields.projet.status = "is-danger" : this.validationFields.projet.status = "is-success";
       !this.formData.selectEchelonnement ? this.validationFields.echelonnement.status = "is-danger" : this.validationFields.echelonnement.status = "is-success";
       !this.formData.inputReference ? this.validationFields.reference.status = "is-danger" : this.validationFields.reference.status = "is-success";
 
-      if(!(this.validationFields.projet.status === "is-danger" || this.validationFields.client.status === "is-danger" || this.validationFields.reference.status === "is-danger" || this.validationFields.echelonnement.status === "is-danger")){
+      if(!(this.validationFields.reference.status === "is-danger" || this.validationFields.echelonnement.status === "is-danger")){
         this.$nuxt.$loading.start();
 
         await this.$axios.$patch(`http://localhost:3000/devis/update-devis/${this.$route.params.id}`, {
-          "projet": this.formData.selectProjet,
-          "client": this.formData.selectClient,
           "reference": this.formData.inputReference,
           "echelonnement": this.formData.selectEchelonnement
         })
